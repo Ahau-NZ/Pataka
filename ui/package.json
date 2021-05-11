@@ -4,8 +4,7 @@
   "description": "A pub application for the Ahau ecosystem. Built using scuttlebutt",
   "homepage": "https://gitlab.com/ahau/whakapapa-ora",
   "scripts": {
-    "dev": "vue-cli-service serve --open --port 8081",
-    "serve": "vue-cli-service serve --port 8081",
+    "dev": "vue-cli-service serve --port 8081",
     "storybook": "start-storybook -p 6002",
     "build": "vue-cli-service build --dest ../dist",
     "lint": "vue-cli-service lint",

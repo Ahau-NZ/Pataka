@@ -1,4 +1,7 @@
-import { DECEASED_COLOUR, ALIVE_COLOUR } from '../../ui/src/lib/constants'
+// copied from whakapapa-ora
+export const DECEASED_COLOUR = '#bfbfbf'
+export const ALIVE_COLOUR = '#427979'
+
 export default {
   theme: {
     dark: true,

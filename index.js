@@ -1,8 +1,10 @@
 const ahoy = require('ssb-ahoy')
-const Config = require('./ssb.config')
 const env = require('ahau-env')
+const { join } = require('path')
+const Config = require('./ssb.config')
 
 const plugins = [
+  'ssb-db',
   'ssb-master',
   'ssb-unix-socket',
   'ssb-no-auth',
@@ -51,7 +53,7 @@ Forward together!
 
 const appURL = env.isDevelopment
   ? 'http://localhost:8081' // dev-server
-  : `file://${__dirname}/dist/index.html` // production build
+  : `file://${join(__dirname, '/dist/index.html')}` // production build
 
 ahoy({
   title: 'Pātaka',
