@@ -37,6 +37,8 @@ module.exports = {
   win: {
     icon: 'build/win/icon.ico',
     publisherName: ['Ahau NZ Limited']
+    // WARNING - this name must exactly match the subject/ "issued to" field on the Signing Certificate
+    // In future if this name changes, auto-updating will fail D:
   },
   nsis: {
     artifactName: '${name}-Windows-${version}.${ext}', // eslint-disable-line
@@ -59,7 +61,6 @@ module.exports = {
     '!**/node_modules/**/{test,__tests__,tests,powered-test,example,examples}',
 
     /* custom */
-
     '!**/node_modules/*.d.ts',
     '!**/node_modules/.bin',
     '!**/*.{iml,o,hprof,orig,pyc,pyo,rbc,swp,csproj,sln,xproj}',
