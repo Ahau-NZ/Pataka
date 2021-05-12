@@ -1,6 +1,7 @@
 const ahoy = require('ssb-ahoy')
 const env = require('ahau-env')
 const { join } = require('path')
+const { autoUpdater } = require('electron-updater')
 const Config = require('./ssb.config')
 
 const plugins = [
@@ -60,9 +61,13 @@ ahoy({
   config: Config(),
   plugins,
   appURL,
-  // appDir: '../whakapapa-ora', // only use this when ssb-ahoy symlinked
+  // appDir: '../../AHAU/pataka', // only use this when ssb-ahoy symlinked
   onReady: ({ config }) => {
     // this config has updated manifest added
     console.log(karakia)
+
+    if (env.isProduction) {
+      autoUpdater.checkForUpdatesAndNotify()
+    }
   }
 })

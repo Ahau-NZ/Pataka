@@ -68,5 +68,12 @@ module.exports = {
     '!**/{__pycache__,thumbs.db,.flowconfig,.idea,.vs,.nyc_output}',
     '!**/{appveyor.yml,.travis.yml,circle.yml}',
     '!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}'
-  ]
+  ],
+
+  publish: [{
+    provider: 'github',
+    owner: 'protozoa-nz',
+    repo: 'pataka',
+    releaseType: 'release'
+  }]
 }

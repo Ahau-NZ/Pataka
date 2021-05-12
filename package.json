@@ -1,6 +1,6 @@
 {
   "name": "pataka",
-  "version": "2.0.0",
+  "version": "1.0.0",
   "description": "A pub application for the Ahau ecosystem. Built using scuttlebutt",
   "homepage": "https://gitlab.com/ahau/pataka",
   "scripts": {
@@ -13,12 +13,13 @@
     "pack": "electron-builder --config build/electron-builder.config.js --dir",
     "dist": "electron-builder --config build/electron-builder.config.js",
     "publish": "electron-builder --config build/electron-builder.config.js --publish always",
-    "move-release": "rimraf releases/pataka && mvy pataka/dist/installers releases/pataka",
+    "move-release": "rimraf releases && mvy pataka/dist/installers releases",
     "release": "npm run build:ui && npm run publish && npm run move-release",
     "lint": "cd ui && npm run lint"
   },
   "dependencies": {
     "ahau-env": "^2.2.0",
+    "electron-updater": "^4.3.8",
     "secret-stack": "^6.4.0",
     "ssb-ahoy": "^4.1.1",
     "ssb-backlinks": "^2.1.1",
