@@ -1,6 +1,6 @@
 {
   "name": "pataka",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "A pub application for the Ahau ecosystem. Built using scuttlebutt",
   "homepage": "https://gitlab.com/ahau/pataka",
   "scripts": {
