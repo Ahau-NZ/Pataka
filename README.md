@@ -73,6 +73,13 @@ NOTES:
     - smoke-testing the application (step 4) is vital
     - fix it quick!
     - you can run the same release multiple times and it will over-write files on github
+- CHECK THE INSTALLER SIZE
+    - we've seen weird thing where installers are turning out at 300-800MB (they should be 100-150MB)
+    - factors that could be influencing:
+        - electron version?
+        - polluted build folders?
+            - `rm -rf dist` seems to help sometimes, not sure why
+            - `rm -rf releases` because paranoid?
 
 ---
 
