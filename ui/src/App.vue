@@ -4,14 +4,24 @@
     <v-main>
       <router-view />
     </v-main>
+
+    <div class='version'>
+      <span>version</span> {{version}}
+    </div>
   </v-app>
 </template>
 
 <script>
 import Appbar from '@/components/Appbar.vue'
+const { version } = require('../../package.json')
 
 export default {
   name: 'App',
+  data () {
+    return {
+      version
+    }
+  },
   computed: {
     displayAppbar () {
       if (this.$route.name === 'login') return false
@@ -62,6 +72,35 @@ body {
     background-repeat: no-repeat;
     background-size: 100vh;
     background-position: 60vw 15vh;
+  }
+}
+
+.version {
+  color: #999;
+  position: fixed;
+  bottom: 5px;
+  right: 10px;
+  font-size: .8rem;
+  transition: all .3s ease-in;
+
+  span {
+    font-size: .8rem;
+    color: rgba(0,0,0,0);
+    transition: all .3s ease-in;
+  }
+
+  &:hover {
+    color: #555;
+    font-size: 1.2rem;
+
+    background-color: #fff;
+    padding: 0 4px;
+    border: 1px solid #444;
+    border-radius: 4px;
+
+    span {
+      color: #555;
+    }
   }
 }
 </style>

@@ -13,7 +13,7 @@
     "pack": "electron-builder --config build/electron-builder.config.js --dir",
     "dist": "electron-builder --config build/electron-builder.config.js",
     "publish": "electron-builder --config build/electron-builder.config.js --publish always",
-    "move-release": "rimraf releases && mvy pataka/dist/installers releases",
+    "move-release": "rimraf releases && mvy dist/installers releases",
     "release": "npm run build:ui && npm run publish && npm run move-release",
     "lint": "cd ui && npm run lint"
   },
@@ -48,6 +48,7 @@
     "electron-builder": "^22.7.0",
     "electron-notarize": "^1.0.0",
     "esm": "^3.2.25",
+    "mvy": "^0.2.1",
     "rimraf": "^2.7.1",
     "sharp": "0.23.4",
     "to-ico": "^1.1.5",
