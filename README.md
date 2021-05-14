@@ -54,7 +54,7 @@ Steps:
 2. **push the tag up to repos**
     ```bash
     $ git push origin master --tags
-    $ git push github master --tags   # the protozoa-nz/protozoa repo
+    $ git push github master --tags   # the protozoa-nz/pataka repo
     ```
 3. **run release process**
     ```
