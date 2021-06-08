@@ -8,7 +8,6 @@
               color="grey"
               outlined
               :disabled="network.portForwarding === null"
-              tile
               @click="tryInvite"
             >{{!network.ipv4 ? 'Loading network data' : 'Generate join code'}}</v-btn>
           </v-row>
@@ -16,24 +15,25 @@
         <v-col v-if="generateError">
           <p class="red--text caption mb-0">{{generateError}}</p>
         </v-col>
-        <v-col cols="8" v-else-if="generatedInvite" class="generated-code">
+        <v-col cols="8" v-else-if="generatedInvite" class="generated-code pl-6">
           <v-row>
             <h2>Pātaka single use code</h2>
           </v-row>
-          <v-row align="center" class="mt-2">
-            <p class="grey--text mb-0" id="inviteCode">{{generatedInvite}}</p>
+          <v-row align="center">
+            <p class="grey--text my-2" id="inviteCode">{{generatedInvite}}</p>
+          </v-row>
+          <v-row>
             <v-btn
               color="grey"
               outlined
-              tile
-              class="ml-8 text-uppercase"
+              class="mt-2 text-uppercase"
               @click="copyCode"
             >{{copyText}}</v-btn>
           </v-row>
         </v-col>
         <v-col v-else class="generated-code"></v-col>
       </v-row>
-      <v-row justify="center">
+      <v-row justify="center" class="mt-4">
         <v-col cols="4">
           <Avatar
             size="180px"
@@ -85,7 +85,7 @@
           </v-col>
         </v-col>
         <v-col cols="8">
-          <v-row class="stat-column">
+          <v-row class="stat-column pt-6">
             <v-col cols="6">
               <Meter title="CPU" :values="cpuLoad" />
             </v-col>
@@ -93,7 +93,7 @@
               <Meter title="RAM" :values="memoryLoad" />
             </v-col>
           </v-row>
-          <v-row class="pt-12">
+          <v-row class="pt-6">
             <v-col cols="6" class="stat-column">
               <h2 class="h2 text-uppercase pb-8">People</h2>
               <p v-if="invitedPeople.length === 0" class="caption">There is no one connected to your network</p>
@@ -326,7 +326,7 @@ export default {
       // TODO!!!!! This is a hack to allow generating an invite code without port forwarding
       // - the current portForwarding check doesnt seem to be working with mac
       // - shows port forwarding isnt enabled when it was
-      if (this.portForwarding || true) await this.generateInviteCode(this.network.publicIpv4) // eslint-disable-line
+      if (this.portForwarding) await this.generateInviteCode(this.network.publicIpv4) // eslint-disable-line
       else this.toggleDialog()
     },
     async checkPortForwarding () {
