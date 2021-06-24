@@ -12,8 +12,10 @@
 </template>
 
 <script>
+import { createNamespacedHelpers } from 'vuex'
 import Appbar from '@/components/Appbar.vue'
 const { version } = require('../../package.json')
+const { mapActions: mapAnalyticsActions } = createNamespacedHelpers('analytics')
 
 export default {
   name: 'App',
@@ -21,6 +23,10 @@ export default {
     return {
       version
     }
+  },
+  methods: {
+    ...mapAnalyticsActions(['appUsed'])
+    /// TODO get this running every 30 mins
   },
   computed: {
     displayAppbar () {

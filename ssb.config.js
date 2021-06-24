@@ -1,9 +1,10 @@
-const Config = require('ssb-config/defaults')
-const env = require('ahau-env')
+const Config = require('ssb-config/inject')
 const fs = require('fs')
 const path = require('path')
+const env = require('ahau-env')
+const crypto = require('crypto')
 
-const customConfig = {
+const customConfig = (mixpanelId) => ({
   port: env.pataka.port,
   allowPrivate: true, // used for making local invite codes
   // HACK: There is a problem with ssb-invite where it look for a public incoming connection in the config which does not exist
@@ -15,6 +16,7 @@ const customConfig = {
   // caps = capabilities, only apps with:
   // - the same shs ("secret handshake") key can connect to each other
   // - thas same sign can verify (+replicatie) messages with each other
+  friends: { hops: 2 },
   lan: {
     legacy: false
     // disables legacy UDP announce (which doesn't respect caps.shs!)
@@ -30,23 +32,40 @@ const customConfig = {
   },
   recpsGuard: {
     allowedTypes: [
-      'contact'
+      'contact' // needed for ssb-invite
     ]
-  }
-}
+  },
+  mixpanelId // unique string to be added
+})
+
+let config = null
 
 module.exports = function () {
-  const config = Config(env.pataka.appName, customConfig)
+  if (config) return config
 
-  // write a copy of this customConfig to ~/.{appName}/config
-  fs.writeFile(
+  config = Config(env.pataka.appName, customConfig())
+  // NOTE this pulls in config from ~/.{appName}>/config as the base then merges customConfig
+
+  if (!env.isProduction) {
+    console.log(`\x1b[37m\x1b[41m NODE_ENV \x1b[31m\x1b[47m ${env.name} \x1b[0m`)
+  }
+
+  if (!config.mixpanelId) config.mixpanelId = generateId()
+
+  // write a copy of customConfig to ~/.{appName}/config so that:
+  // - ssb-ahoy + ssb-client can load up the right config to be able to connect to the server
+  // - we can persist our unique mixpanel ID for anonymous analytics
+  fs.writeFileSync(
     path.join(config.path, 'config'),
-    JSON.stringify(customConfig, null, 2),
-    err => {
+    JSON.stringify(customConfig(config.mixpanelId), null, 2),
+    (err) => {
       if (err) throw err
-      // console.log('saved config')
     }
   )
 
   return config
+}
+
+function generateId () {
+  return crypto.randomBytes(32).toString('base64')
 }
