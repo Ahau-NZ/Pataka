@@ -1,6 +1,6 @@
 import mixpanel from './mixpanel'
 
-const version = require('../../../../package.json').version
+const version = require('../../../../../package.json').version
 
 const state = {}
 const getters = {}

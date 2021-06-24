@@ -1,11 +1,19 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-// import set from 'lodash.set'
+import analytics from './modules/analytics'
+
 Vue.use(Vuex)
 
-export default new Vuex.Store({
+const rootModule = {
   state: {},
   getters: {},
   mutations: {},
   actions: {}
+}
+
+export default new Vuex.Store({
+  ...rootModule,
+  modules: {
+    analytics
+  }
 })

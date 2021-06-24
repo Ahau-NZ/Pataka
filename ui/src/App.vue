@@ -30,7 +30,7 @@ export default {
   methods: {
     ...mapAnalyticsActions(['patakaPing'])
   },
-  mounted  () {
+  created  () {
     if (interval) return
 
     this.patakaPing()
