@@ -12,8 +12,13 @@
 </template>
 
 <script>
+import { createNamespacedHelpers } from 'vuex'
 import Appbar from '@/components/Appbar.vue'
 const { version } = require('../../package.json')
+const { mapActions: mapAnalyticsActions } = createNamespacedHelpers('analytics')
+
+const MIN = 60e3
+let interval
 
 export default {
   name: 'App',
@@ -21,6 +26,15 @@ export default {
     return {
       version
     }
+  },
+  methods: {
+    ...mapAnalyticsActions(['patakaPing'])
+  },
+  created  () {
+    if (interval) return
+
+    this.patakaPing()
+    interval = setInterval(this.patakaPing, 10 * MIN) // gets throttled in actions
   },
   computed: {
     displayAppbar () {
