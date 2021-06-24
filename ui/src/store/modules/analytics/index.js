@@ -7,8 +7,8 @@ const getters = {}
 const mutations = {}
 
 const actions = {
-  appUsed ({ state, commit }) {
-    mixpanel.throttledTrack('using-app', { version })
+  patakaPing ({ state, commit }) {
+    mixpanel.throttledTrack('pataka-ping', { version })
     // NOTE thottled means means we can call this action as much as we want and
     // mixpanel will only be hit e.g. once an hour (for this particular event)
     //

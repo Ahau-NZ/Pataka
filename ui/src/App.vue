@@ -17,6 +17,9 @@ import Appbar from '@/components/Appbar.vue'
 const { version } = require('../../package.json')
 const { mapActions: mapAnalyticsActions } = createNamespacedHelpers('analytics')
 
+const MIN = 60e3
+let interval
+
 export default {
   name: 'App',
   data () {
@@ -25,8 +28,13 @@ export default {
     }
   },
   methods: {
-    ...mapAnalyticsActions(['appUsed'])
-    /// TODO get this running every 30 mins
+    ...mapAnalyticsActions(['patakaPing'])
+  },
+  mounted  () {
+    if (interval) return
+
+    this.patakaPing()
+    interval = setInterval(this.patakaPing, 10 * MIN) // gets throttled in actions
   },
   computed: {
     displayAppbar () {
