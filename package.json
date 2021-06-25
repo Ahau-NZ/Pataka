@@ -30,7 +30,7 @@
     "ssb-friends": "~4.2.1",
     "ssb-hyper-blobs": "^2.0.0",
     "ssb-invite": "^2.1.7",
-    "ssb-lan": "^0.2.0",
+    "ssb-lan": "^1.0.0",
     "ssb-master": "^1.0.3",
     "ssb-no-auth": "^1.0.0",
     "ssb-pataka": "^3.1.1",
