@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@mdi/font": "^4.5.95",
-    "ahau-env": "^2.2.0",
+    "ahau-env": "^3.0.0",
     "animate.css": "^4.1.0",
     "apollo-upload-client": "^10.0.1",
     "dotenv": "^6.2.0",

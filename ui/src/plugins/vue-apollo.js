@@ -6,7 +6,7 @@ import {
   restartWebsockets
 } from 'vue-cli-plugin-apollo/graphql-client'
 
-const env = require('ahau-env')
+const env = require('ahau-env')()
 
 // Install the vue plugin
 Vue.use(VueApollo)
