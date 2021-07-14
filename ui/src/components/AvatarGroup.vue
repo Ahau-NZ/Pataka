@@ -17,19 +17,18 @@
           <Avatar
             :size="size"
             :isEditing="false"
+            :type="profile.type"
             :image="profile.avatarImage"
             :alt="profile.preferredName"
             :gender="profile.gender"
-            :aliveInterval="profile.aliveInterval"
-            :deceased="profile.deceased"
             :showLabel="showLabels"
             :clickable="clickable"
             @click="profileClick(profile)"
             :deletable="deletable"
             @delete="$emit('delete', i)"
-            :isView="isView || (profile.__typename === 'Community' && !profile.avatarImage)"
             :dark="dark"
             :row="row"
+            :tile="tile"
           />
         </div>
       </div>
@@ -53,7 +52,7 @@ export default {
     customClass: { type: String, default: 'd-flex justify-start align-center pa-2 pl-4' },
     spacing: { type: String, default: 'pr-5' },
     deletable: Boolean,
-    isView: Boolean,
+    tile: Boolean,
     clickable: { type: Boolean, default: true },
     dark: Boolean,
     row: Boolean

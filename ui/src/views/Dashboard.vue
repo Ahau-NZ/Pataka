@@ -37,10 +37,10 @@
         <v-col cols="4">
           <Avatar
             size="180px"
+            type="pataka"
             :alt="profile.preferredName"
             class="pb-4"
             :image="profile.avatarImage"
-            :isView="true"
           />
           <h1 class="text-uppercase text-center">{{profile.preferredName}}</h1>
           <p class="grey--text text-center caption overflow-wrap">{{profile.feedId}}</p>
@@ -259,12 +259,14 @@ export default {
     invitedPeople: {
       query: gql`query {
         invitedPeople {
+          type
           id
           preferredName
-          gender
-          aliveInterval
           avatarImage {
             uri
+          }
+          ...on Person {
+            gender
           }
         }
       }
