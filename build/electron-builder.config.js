@@ -73,7 +73,7 @@ module.exports = {
 
   publish: [{
     provider: 'github',
-    owner: 'protozoa-nz',
+    owner: 'ahau-nz',
     repo: 'pataka',
     releaseType: 'release'
   }]
