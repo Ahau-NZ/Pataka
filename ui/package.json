@@ -17,7 +17,6 @@
     "animate.css": "^4.1.0",
     "apollo-upload-client": "^10.0.1",
     "dotenv": "^6.2.0",
-    "edtf": "^2.8.0",
     "graphql": "^15.5.0",
     "lodash": "^4.17.21",
     "lodash.chunk": "^4.2.0",
