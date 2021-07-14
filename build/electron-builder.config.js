@@ -8,6 +8,32 @@ module.exports = {
   asarUnpack: [
     './node_modules/sodium-native/**' // needed for sodium-native/prebuilds trim, not sure why
   ],
+  files: [
+    '**/*',
+
+    /* custom */
+    '!ui/*',
+    '!dist/installers/*',
+    '!electron-builder.env',
+
+    // sodium-native: only include needed prebuilds
+    '!node_modules/sodium-native/prebuilds/*',
+    'node_modules/sodium-native/prebuilds/${platform}-${arch}/*', // eslint-disable-line
+
+    // README / tests: more aggressive exclusion than default
+    '!**/node_modules/**/{CHANGELOG.md,README*,README,readme.md,readme}',
+    '!**/node_modules/**/{test,__tests__,tests,powered-test,example,examples}',
+
+    /* custom */
+    '!**/node_modules/*.d.ts',
+    '!**/node_modules/.bin',
+    '!**/*.{iml,o,hprof,orig,pyc,pyo,rbc,swp,csproj,sln,xproj}',
+    '!**/._*',
+    '!**/{.DS_Store,.git,.hg,.svn,CVS,RCS,SCCS,.gitignore,.gitattributes}',
+    '!**/{__pycache__,thumbs.db,.flowconfig,.idea,.vs,.nyc_output}',
+    '!**/{appveyor.yml,.travis.yml,circle.yml}',
+    '!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}'
+  ],
 
   linux: {
     category: 'Network',
@@ -44,32 +70,6 @@ module.exports = {
     artifactName: '${name}-Windows-${version}.${ext}', // eslint-disable-line
     installerIcon: 'build/win/setup-icon.ico'
   },
-
-  files: [
-    '**/*',
-    /* custom */
-    '!ui/*',
-    '!dist/installers/*',
-    '!electron-builder.env',
-
-    // sodium-native: only include needed prebuilds
-    '!node_modules/sodium-native/prebuilds/*',
-    'node_modules/sodium-native/prebuilds/${platform}-${arch}/*', // eslint-disable-line
-
-    // README / tests: more aggressive exclusion than default
-    '!**/node_modules/**/{CHANGELOG.md,README*,README,readme.md,readme}',
-    '!**/node_modules/**/{test,__tests__,tests,powered-test,example,examples}',
-
-    /* custom */
-    '!**/node_modules/*.d.ts',
-    '!**/node_modules/.bin',
-    '!**/*.{iml,o,hprof,orig,pyc,pyo,rbc,swp,csproj,sln,xproj}',
-    '!**/._*',
-    '!**/{.DS_Store,.git,.hg,.svn,CVS,RCS,SCCS,.gitignore,.gitattributes}',
-    '!**/{__pycache__,thumbs.db,.flowconfig,.idea,.vs,.nyc_output}',
-    '!**/{appveyor.yml,.travis.yml,circle.yml}',
-    '!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}'
-  ],
 
   publish: [{
     provider: 'github',
