@@ -22,6 +22,7 @@ const plugins = [
   'ssb-query',
   'ssb-backlinks',
 
+  'ssb-settings',
   'ssb-profile',
   // 'ssb-story',
   // 'ssb-artefact',
