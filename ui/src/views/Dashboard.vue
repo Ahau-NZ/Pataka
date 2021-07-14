@@ -259,12 +259,14 @@ export default {
     invitedPeople: {
       query: gql`query {
         invitedPeople {
+          type
           id
           preferredName
-          gender
-          aliveInterval
           avatarImage {
             uri
+          }
+          ...on Person {
+            gender
           }
         }
       }
