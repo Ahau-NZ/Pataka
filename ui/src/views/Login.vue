@@ -118,8 +118,8 @@ export default {
     async save (profileChanges) {
       const newProfile = pick(profileChanges,
         'preferredName',
-        'avatarImage',
-        'description'
+        'description',
+        'avatarImage'
       )
       // TODO replace this with graphql mixin?
       if (newProfile.avatarImage) delete newProfile.avatarImage.uri
@@ -143,6 +143,7 @@ export default {
         console.error('failed to update profile', result)
         return
       }
+
       this.getCurrentIdentity()
     }
   },
