@@ -5,7 +5,7 @@
         <v-hover v-slot="{ hover }">
           <v-avatar
             :size="size"
-            :tile="isView"
+            :tile="tile"
             class="avatar-container"
             :class="{'isEditing': isEditing}"
             :dark="dark"
@@ -24,13 +24,11 @@
       </v-row>
     </v-col>
   </div>
-
 </template>
 
 <script>
 import avatarHelper from '@/lib/avatar-helpers.js'
 // import ImagePicker from '@/components/ImagePicker.vue'
-import logo from '../assets/logo_black.svg'
 
 export default {
   name: 'Avatar',
@@ -39,15 +37,14 @@ export default {
     image: Object,
     alt: String,
     gender: String,
-    aliveInterval: String,
     type: { type: String, default: 'person' },
     size: { type: String, default: '25vh' },
     showLabel: { type: Boolean, default: false },
     clickable: { type: Boolean, default: false },
-    isView: { type: Boolean, default: false },
     isEditing: { type: Boolean, default: false },
     offline: { type: Boolean, default: false },
-    dark: Boolean
+    dark: Boolean,
+    tile: Boolean
   },
   data: function () {
     return {
@@ -56,8 +53,7 @@ export default {
   },
   computed: {
     getImage () {
-      if (this.type === 'person') return avatarHelper.defaultImage(this.isView, this.aliveInterval, this.gender)
-      else return logo
+      return avatarHelper.defaultImage(this.type, this.gender || null)
     },
     customStyle () {
       return {

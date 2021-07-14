@@ -17,7 +17,7 @@
             :src="avatarImage"
             :area="100"
             bg-color="rgba(0, 0, 0, 0)"
-            :round="!isView"
+            :round="!tile"
             shadow="rgba(0,0,0,0.5)"
             :rotate="rotation"
           />
@@ -57,7 +57,7 @@ export default {
   props: {
     show: { type: Boolean, default: false },
     avatarImage: String,
-    isView: { type: Boolean, default: false }
+    tile: Boolean
   },
   data () {
     return {

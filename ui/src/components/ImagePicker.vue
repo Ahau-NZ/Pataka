@@ -11,7 +11,7 @@
       :avatarImage="avatar.new"
       @submit="updateAvatar($event)"
       @close="toggleAvatar(null)"
-      :isView="isView"
+      :tile="tile"
     />
   </div>
 </template>
@@ -27,7 +27,7 @@ export default {
       type: String,
       default: 'Upload profile photo'
     },
-    isView: { type: Boolean, default: false }
+    tile: Boolean
   },
   data () {
     return {
