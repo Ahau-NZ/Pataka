@@ -13,6 +13,7 @@ module.exports = {
 
     /* custom */
     '!ui/*',
+    '!releases/*',
     '!dist/installers/*',
     '!electron-builder.env',
 
