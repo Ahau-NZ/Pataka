@@ -51,14 +51,13 @@ module.exports = function () {
   const persisted = loadPersisted(configPath)
   if (!persisted.mixpanelId) persisted.mixpanelId = generateId()
 
-  config = Config(env.pataka.appName, merge({}, persisted, core))
+  config = Config(env.pataka.appName, merge({}, core, persisted))
 
   // write a copy of customConfig to configPath so that:
-  // - ssb-ahoy + ssb-client can load up the right config to be able to connect to the server
   // - we can persist our unique mixpanel ID for anonymous analytics
   fs.writeFileSync(
     configPath,
-    JSON.stringify(config, null, 2),
+    JSON.stringify(persisted, null, 2),
     (err) => {
       if (err) throw err
     }
