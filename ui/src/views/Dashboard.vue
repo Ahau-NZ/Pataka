@@ -1,39 +1,9 @@
 <template>
   <div class="wrapper">
     <v-container class="px-12" fluid>
-      <v-row >
-        <v-col cols="4">
-          <v-row justify="center">
-            <v-btn
-              color="grey"
-              outlined
-              :disabled="network.portForwarding === null"
-              @click="tryInvite"
-            >{{!network.ipv4 ? 'Loading network data' : 'Generate join code'}}</v-btn>
-          </v-row>
-        </v-col>
-        <v-col v-if="generateError">
-          <p class="red--text caption mb-0">{{generateError}}</p>
-        </v-col>
-        <v-col cols="8" v-else-if="generatedInvite" class="generated-code pl-6">
-          <v-row>
-            <h2>Pātaka single use code</h2>
-          </v-row>
-          <v-row align="center">
-            <p class="grey--text my-2" id="inviteCode">{{generatedInvite}}</p>
-          </v-row>
-          <v-row>
-            <v-btn
-              color="grey"
-              outlined
-              class="mt-2 text-uppercase"
-              @click="copyCode"
-            >{{copyText}}</v-btn>
-          </v-row>
-        </v-col>
-        <v-col v-else class="generated-code"></v-col>
-      </v-row>
       <v-row justify="center" class="mt-4">
+
+        <!-- sidebar -->
         <v-col cols="4">
           <Avatar
             size="180px"
@@ -44,31 +14,37 @@
           />
           <h1 class="text-uppercase text-center">{{profile.preferredName}}</h1>
           <p class="grey--text text-center caption overflow-wrap">{{profile.feedId}}</p>
-          <v-col cols="8" class="mx-auto mt-8">
+          <v-col cols="7" class="mx-auto mt-8">
+
+            <!-- network status -->
             <v-row justify="start" align="center" class="py-2">
               <div
                 class="dot mr-4 internet-dot"
                 :class="network.internetLatency ? network.internetLatency === -1 ? 'red' : 'green' : 'grey'"
               />
-              <p
-                class="caption text-uppercase text-center ma-0"
-              >{{ network.internetLatency ? network.internetLatency === -1 ? 'Offline' : 'Online' : 'Checking'}}</p>
+              <p class="caption text-uppercase text-center ma-0">
+                {{ network.internetLatency ? network.internetLatency === -1 ? 'Offline' : 'Online' : 'Checking' }}
+              </p>
               <span class="network-latency">{{latency}}</span>
             </v-row>
             <v-row justify="start" align="center" class="py-2 network-local">
               <div class="dot mr-4" :class="network.ipv4 ? 'green' : 'grey'" />
-              <p class="caption text-uppercase ma-0">{{network.ipv4 ? ' Local Network' : 'Checking'}}</p>
+              <p class="caption text-uppercase ma-0">
+                {{network.ipv4 ? ' Local Network' : 'Checking'}}
+              </p>
             </v-row>
              <v-row justify="start" align="center" class="py-2">
               <div
                 class="dot mr-4"
                 :class="network.portForwarding ? 'green' : network.internetLatency === null ? 'grey' : 'orange'"
               />
-              <p
-                class="caption text-uppercase text-center ma-0"
-              >{{ network.portForwarding ? 'Port-Forwarding' : network.portForwarding === null ? 'Checking' : 'Port-Forwarding Off' }}</p>
+              <p class="caption text-uppercase text-center ma-0" >
+                {{ network.portForwarding ? 'Port-Forwarding' : network.portForwarding === null ? 'Checking' : 'Port-Forwarding Off' }}
+              </p>
             </v-row>
-            <v-col class="mt-8">
+
+            <!-- disk status -->
+            <v-row class="mt-8" justify="center">
               <h2 style="text-align:center;">Disk Usage</h2>
               <v-progress-linear
                 v-for="disk in diskUsage"
@@ -81,18 +57,58 @@
                 <strong class="pr-2">{{ Math.ceil(disk.use) }}%</strong>
                 <span class="caption">{{disk.fs}}</span>
               </v-progress-linear>
-            </v-col>
+            </v-row>
           </v-col>
+
         </v-col>
+
+        <!-- main body -->
         <v-col cols="8">
-          <v-row class="stat-column pt-6">
-            <v-col cols="6">
+          <!-- meters -->
+          <v-row class="stat-column">
+            <v-col cols=6>
               <Meter title="CPU" :values="cpuLoad" />
             </v-col>
-            <v-col cols="6">
+            <v-col cols=6>
               <Meter title="RAM" :values="memoryLoad" />
             </v-col>
           </v-row>
+
+          <!-- generate code -->
+          <v-row class="pt-6">
+            <v-col cols="12">
+              <v-btn color="grey" outlined
+                :disabled="network.portForwarding === null"
+                @click="tryInvite"
+              >
+                {{!network.ipv4 ? 'Loading network data' : 'Generate join code'}}
+              </v-btn>
+            </v-col>
+
+            <v-col v-if="generateError">
+              <p class="red--text caption mb-0">{{generateError}}</p>
+            </v-col>
+            <v-col v-else-if="generatedInvite" cols="12"  class="generated-code pl-10">
+              <v-row align="center">
+                Pātaka single use code:
+                <div class="pa-1 mr-2 my-2" id="invite-code">{{generatedInvite}}</div>
+                <v-btn
+                  color="grey"
+                  outlined
+                  class="text-uppercase"
+                  justify="end"
+                  @click="copyCode"
+                >
+                  <v-icon v-if="copyText === 'Copy'" small left>mdi-content-copy</v-icon>
+                  <v-icon v-else small left>mdi-check</v-icon>
+                  {{copyText}}
+                </v-btn>
+              </v-row>
+            </v-col>
+            <v-col v-else class="generated-code"></v-col>
+          </v-row>
+
+          <!-- known profiles -->
           <v-row class="pt-6">
             <v-col cols="6" class="stat-column">
               <h2 class="h2 text-uppercase pb-8">People</h2>
@@ -103,6 +119,7 @@
                 </div>
               </v-row>
             </v-col>
+
             <v-col cols="6" class="stat-column pl-6">
               <h2 class="h2 text-uppercase pb-8">Tribes</h2>
               <p v-if="tribes.length === 0" class="caption">There are no tribes on your network</p>
@@ -113,9 +130,12 @@
               </v-row>
             </v-col>
           </v-row>
+
         </v-col>
+
       </v-row>
     </v-container>
+
     <GenerateInviteDialog
       v-if="dialog"
       :show="dialog"
@@ -377,12 +397,19 @@ export default {
   // background-color: white;
   width: 100%;
   height: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
 }
 .generated-code {
-  height: 70px;
+  min-height: 70px;
 }
-#inviteCode {
+#invite-code {
   font-size: 0.5em;
+  font-family: monospace;
+  color: grey;
+  background: white;
+  border: 1px solid white;
+  border-radius: 3px;
 }
 .feed-id {
   font-size: 0.9em;
@@ -450,12 +477,14 @@ h2 {
     font-weight: 400;
     letter-spacing: 4px;
 }
+
 @media screen and (min-width: 1280px) {
-  #inviteCode {
+  #invite-code {
     font-size: 0.8em;
   }
   .feed-id {
     font-size: 0.8em;
   }
 }
+
 </style>
