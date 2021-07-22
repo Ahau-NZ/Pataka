@@ -1,23 +1,18 @@
 <template>
-  <Dialog
-    :title="`Crop Photo`"
-    :show="show"
+  <Dialog title="Crop Photo" :show="show" width="750px" :goBack="close" enableMenu dark
+    @submit="submit"
     @close="close"
-    width="600px"
-    :goBack="close"
-    enableMenu
-    background="black"
   >
     <template v-slot:content>
       <v-row justify="center">
-        <v-col style="max-width: 400px;">
+        <v-col style="max-width: 500px;">
           <clipper-fixed
             ref="avatar"
             :grid="false"
             :src="avatarImage"
             :area="100"
-            bg-color="rgba(0, 0, 0, 0)"
             :round="!tile"
+            bg-color="rgba(0, 0, 0, 0)"
             shadow="rgba(0,0,0,0.5)"
             :rotate="rotation"
           />
@@ -26,28 +21,29 @@
 
       <div class="px-8 py-4">
         <h6 class="caption pt-8 white--text">
-          <v-icon dark>mdi-gesture-tap</v-icon>Adjust the image by zooming, scaling and moving it around before
+          <v-icon dark>mdi-gesture-tap</v-icon>
+          Adjust the image by zooming, scaling and moving it around before
           saving.
         </h6>
 
         <h5 class="pt-8 white--text">rotate</h5>
-        <clipper-range v-model="rotation" style="max-width:300px" :min="0" :max="360"></clipper-range>
+        <clipper-range
+          v-model="rotation"
+          style="max-width: 300px"
+          :min="0"
+          :max="360"
+        ></clipper-range>
       </div>
-    </template>
-    <template v-slot:actions>
-      <v-btn @click="close" text large fab class="secondary--text">
-        <v-icon color="secondary">mdi-close</v-icon>
-      </v-btn>
-      <v-btn @click="submit" text large fab class="blue--text">
-        <v-icon>mdi-check</v-icon>
-      </v-btn>
     </template>
   </Dialog>
 </template>
 
 <script>
 import Dialog from '@/components/Dialog.vue'
-import { UPLOAD_FILE } from '@/lib/file-helpers.js'
+import { makeFile, uploadFile } from '@/lib/file-helpers.js'
+
+const MB = 1024 * 1024
+const MAX_FILE_SIZE = 5 * MB
 
 export default {
   name: 'AvatarEditDialog',
@@ -70,26 +66,61 @@ export default {
     },
     async submit () {
       try {
-        const canvas = this.$refs.avatar.clip({ maxWPixel: 1920 })
+        const canvas = this.$refs.avatar.clip({
+          maxWPixel: this.type === 'header' ? 1920 : 800
+        })
         canvas.toBlob(async blob => {
-          const file = new File([blob], 'avatar', { type: blob.type })
+          const file = makeFile(blob)
 
-          const result = await this.$apollo.mutate(UPLOAD_FILE({ file, encrypt: true }))
-          if (result.errors) throw result.errors
+          if (file.size >= 5 * 1024 * 1024) {
+            console.error('this avatar image is bigger than 5MB, we cannot allow this through, otherwise it will end up a hyperblob, which AvatarImage does not currently support')
+            throw new Error('avatar image must me < 5MB')
+          }
 
-          var image = result.data.uploadFile
+          console.log('here1')
+          const image = await this.uploadFile({ file, encrypt: true })
 
+          if (image.mimeType === null) image.mimeType = file.type
           // TODO: HACK until mimeType: Hello World gets solved
-          if (image.mimeType === null || image.mimeType === 'Hello World') image.mimeType = file.type
+          if (image.mimeType === 'Hello World') {
+            image.mimeType = file.type
+          }
+
+          // NOTE: ssb-profile blobs uses blob.blob not blob.blobId (which are the artefact style)
+          if (image.blobId) image.blob = image.blobId
+          delete image.blobId
 
           let cleanImage = {}
           Object.entries(image).forEach(([key, value]) => {
-            if (key !== '__typename') cleanImage[key] = value
+            if (key === '__typename') return
+            if (key === 'type') return
+            cleanImage[key] = value
           })
           this.$emit('submit', cleanImage)
         })
       } catch (error) {
         throw error
+      }
+    },
+    async uploadFile (input) {
+      try {
+        if (input.file && input.file.size > MAX_FILE_SIZE) {
+          throw new Error('Please check the file size is less than 5MB')
+        }
+
+        
+
+        const res = await this.$apollo.mutate(
+          uploadFile(input)
+        )
+
+        console.log('here')
+        if (res.errors) throw res.errors
+
+        return res.data.uploadFile
+      } catch (err) {
+        console.error('Something went wrong while trying to upload a file', err)
+        return null
       }
     }
   }
