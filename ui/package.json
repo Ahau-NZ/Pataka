@@ -9,13 +9,14 @@
     "build": "vue-cli-service build --dest ../dist",
     "lint": "vue-cli-service lint",
     "test:js": "tape -r 'esm' 'src/**/*.test.js' | tap-spec",
-    "test": "npm run test:js && npm run lint"
+    "test": "npm run test:js && npm run lint",
+    "build-fragment": "NODE_ENV=development node src/schemaQuery.js"
   },
   "dependencies": {
     "@mdi/font": "^4.5.95",
     "ahau-env": "^3.0.0",
     "animate.css": "^4.1.0",
-    "apollo-upload-client": "^10.0.1",
+    "apollo-upload-client": "^15.0.0",
     "dotenv": "^6.2.0",
     "graphql": "^15.5.0",
     "lodash": "^4.17.21",

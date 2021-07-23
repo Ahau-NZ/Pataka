@@ -77,7 +77,6 @@ export default {
             throw new Error('avatar image must me < 5MB')
           }
 
-          console.log('here1')
           const image = await this.uploadFile({ file, encrypt: true })
 
           if (image.mimeType === null) image.mimeType = file.type
@@ -85,6 +84,8 @@ export default {
           if (image.mimeType === 'Hello World') {
             image.mimeType = file.type
           }
+
+          console.log(JSON.stringify(image, null, 2))
 
           // NOTE: ssb-profile blobs uses blob.blob not blob.blobId (which are the artefact style)
           if (image.blobId) image.blob = image.blobId
@@ -107,8 +108,6 @@ export default {
         if (input.file && input.file.size > MAX_FILE_SIZE) {
           throw new Error('Please check the file size is less than 5MB')
         }
-
-        
 
         const res = await this.$apollo.mutate(
           uploadFile(input)

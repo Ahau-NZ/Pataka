@@ -1,0 +1,60 @@
+{
+  "__schema": {
+    "types": [
+      {
+        "name": "Blob",
+        "kind": "INTERFACE",
+        "possibleTypes": [
+          {
+            "name": "BlobScuttlebutt",
+            "description": "Blobs of the ssb-blobs variety"
+          },
+          {
+            "name": "BlobHyper",
+            "description": "Blobs of the ssb-hyper-blobs variety"
+          }
+        ]
+      },
+      {
+        "name": "_Entity",
+        "kind": "UNION",
+        "possibleTypes": [
+          {
+            "name": "CurrentIdentity",
+            "description": "Secure Scuttlebutt current identity"
+          },
+          {
+            "name": "PublicIdentity",
+            "description": null
+          },
+          {
+            "name": "PersonalIdentity",
+            "description": null
+          },
+          {
+            "name": "Peer",
+            "description": "Secure Scuttlebutt replication peer"
+          }
+        ]
+      },
+      {
+        "name": "Profile",
+        "kind": "INTERFACE",
+        "possibleTypes": [
+          {
+            "name": "Person",
+            "description": "Person fields used by ssb-profile plugin"
+          },
+          {
+            "name": "Pataka",
+            "description": null
+          },
+          {
+            "name": "Community",
+            "description": "Community profile (fields from ssb-profile plugin)"
+          }
+        ]
+      }
+    ]
+  }
+}
