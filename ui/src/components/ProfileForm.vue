@@ -1,8 +1,8 @@
 <template>
-  <v-form ref="form" light class="px-4">
+  <v-form ref="form" light class="px-4 pt-4">
     <v-row>
       <!-- Upload profile photo -->
-      <v-col :order="mobile ? '' : '2'" class="py-0">
+      <v-col :order="mobile ? '' : '2'" class="pt-6">
         <v-row class="justify-center pt-3">
           <!-- <v-col cols="12" class="pa-0" > -->
           <!-- Avatar -->
@@ -10,15 +10,12 @@
             class="big-avatar"
             size="200px"
             type="pataka"
-            tile
             :image="formData.avatarImage"
             :alt="formData.preferredName"
             :isEditing="isEditing"
+            :isView="false"
             @updateAvatar="formData.avatarImage = $event"
           />
-        </v-row>
-        <v-row v-if="isEditing" class="justify-center">
-          <h1>{{ t('addPersonFormTitle', { name: formData.preferredName }) }}</h1>
         </v-row>
         <v-row v-if="isEditing" class="justify-center">
           <v-btn @click="$emit('cancel')" color="white" text medium class="blue--text">

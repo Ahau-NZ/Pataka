@@ -7,8 +7,8 @@
           {{ label || 'Upload Photo'  }}
         </p>
       </v-row>
-
     </clipper-upload>
+
     <AvatarEditDialog
       v-if="avatar.showEditor"
       :show="avatar.showEditor"
@@ -56,19 +56,19 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  .upload-pic-row {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
+.upload-pic-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
 
-    p.toggle {
-      margin: 0px;
-      font-size: 14px;
-      color: rgba(0,0,0,0.8);
-      background-color: rgba(255,255,255,0.5);
-      cursor: pointer;
-      font-weight: 400;
-    }
+  p.toggle {
+    margin: 0px;
+    font-size: 14px;
+    color: rgba(0,0,0,0.8);
+    background-color: rgba(255,255,255,0.5);
+    cursor: pointer;
+    font-weight: 400;
   }
+}
 </style>

@@ -12,6 +12,7 @@
             class="pb-4"
             :image="profile.avatarImage"
           />
+          <!-- TODO allow editing the profile -->
           <h1 class="text-uppercase text-center">{{profile.preferredName}}</h1>
           <p class="grey--text text-center caption overflow-wrap">{{profile.feedId}}</p>
           <v-col cols="7" class="mx-auto mt-8">
@@ -384,9 +385,9 @@ export default {
   },
   components: {
     Avatar,
+    AvatarGroup,
     Meter,
-    GenerateInviteDialog,
-    AvatarGroup
+    GenerateInviteDialog
   }
 }
 </script>
