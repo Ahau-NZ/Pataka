@@ -35,12 +35,15 @@
       </v-col>
 
       <!-- Names -->
-      <v-col cols="12" :sm="mobile ? '12' : '6'" class="pt-4">
+      <v-col cols="12" :sm="mobile ? '12' : '6'" class="pt-2">
         <v-row>
           <v-col cols="12" class="pa-1">
-            <slot name="search">
-              <v-text-field v-model="formData.preferredName" label="Pātaka name" outlined />
-            </slot>
+            <v-text-field 
+              v-model="formData.preferredName" 
+              label="Pātaka name" outlined 
+              :rules="nameRules"
+              required
+            />          
           </v-col>
         </v-row>
         <v-row>
@@ -50,7 +53,7 @@
               v-model="formData.description"
               label="Description"
               no-resize
-              rows="10"
+              rows="5"
               auto-grow
               outlined
             ></v-textarea>
@@ -82,7 +85,8 @@ export default {
       form: {
         valid: true,
         showDescription: false
-      }
+      },
+      nameRules: [ v => !!v || 'Pataka name required' ]
     }
   }
 }

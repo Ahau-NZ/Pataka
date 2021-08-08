@@ -4,10 +4,34 @@
       <img src="@/assets/logo_red.svg" />
       <h1>Āhau Pātaka</h1>
     </div>
-    <v-btn v-if="!isLoading && !isSetup" text x-large color="#b12526" @click.prevent="toggleNew">
+    <div v-if="!isLoading && !isSetup" class="welcome-text" style="justify-items:center;display: grid;">
+      <v-row>
+        <p class="mb-0 headliner">Nau mai</p>
+      </v-row>
+      <v-row>
+        <p class="mb-0 headliner">Whakatau mai</p>
+      </v-row>
+      <v-row class="pb-12">
+        <p style="color:darkgrey" class="mb-0 headliner2">welcome</p>
+      </v-row>
+      <v-row class="mt-10">
+        <v-btn
+          text
+          x-large
+          color="#b12526"
+          style="border-color:#b12526; background-color: #303030;"
+          @click.prevent="toggleNew"
+          outlined
+        >
+            <p class="login-text mb-0">create pataka</p>
+
+        </v-btn>
+      </v-row>
+    </div>
+    <!-- <v-btn v-if="!isLoading && !isSetup" text x-large color="#b12526" @click.prevent="toggleNew">
       <v-icon left>mdi-plus</v-icon>
       <p class="mb-0">Create Pātaka</p>
-    </v-btn>
+    </v-btn> -->
     <NewNodeDialog
       v-if="dialog"
       :show="dialog"
@@ -166,7 +190,6 @@ h1 {
 .container {
   width: 100%;
   height: 90%;
-
   display: flex;
   justify-content: center;
   align-items: center;
@@ -181,9 +204,40 @@ h1 {
   align-items: center;
 }
 .name {
+  font-size: 1em;
+  text-transform: uppercase;
+  font-weight: 400;
+  letter-spacing: 3px;
   color: white;
 }
 .body-width {
   max-width: 900px;
 }
+.button:hover {
+  cursor: pointer;
+}
+
+.welcome-text {
+  position: relative;
+  top: -10%;
+}
+
+ .headliner {
+    font-size: 1.5em;
+    text-transform: uppercase;
+    font-weight: 400;
+    letter-spacing: 5px;
+  }
+
+ .headliner2 {
+    padding-top: 50px;
+    font-size: 1.5em;
+    text-transform: uppercase;
+    font-weight: 300;
+    letter-spacing: 3px;
+  }
+
+  .login-text {
+    font-weight: 500;
+  }
 </style>

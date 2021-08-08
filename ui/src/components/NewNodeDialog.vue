@@ -11,10 +11,10 @@
     <!-- Actions Slot -->
     <template v-slot:actions style="border: 2px solid orange;">
       <v-btn @click="close" text large fab class="secondary--text">
-        <v-icon color="secondary">mdi-close</v-icon>
+        <span color="secondary">cancel</span>
       </v-btn>
       <v-btn @click="submit" text large fab class="blue--text ml-5">
-        <v-icon>mdi-check</v-icon>
+        <span>save</span>
       </v-btn>
     </template>
     <!-- End Actions Slot -->
@@ -67,16 +67,13 @@ export default {
   },
   methods: {
     submit () {
+      if (this.submission && !this.submission.preferredName) return
       this.$emit('create', this.submission)
       this.close()
     },
     close () {
       this.resetFormData()
       this.$emit('close')
-    },
-    async setFormData (person) {
-      this.hasSelection = true
-      this.formData = person.profile
     },
     resetFormData () {
       this.formData = setDefaultData()
