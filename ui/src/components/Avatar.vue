@@ -10,7 +10,7 @@
             :class="{'isEditing': isEditing}"
             :dark="dark"
           >
-            <v-img v-if="image && image.uri" :src="image.uri" :alt="alt" />
+            <v-img v-if="image && image.uri" :src="hackURL(image.uri)" :alt="alt" />
             <v-img v-else :src="getImage" class="no-pic" :style="customStyle"/>
             <v-overlay
               absolute
@@ -65,6 +65,13 @@ export default {
     // ImagePicker
   },
   methods: {
+    // HACK 2021-08-09 - ideally the backend knows the correct host
+    // currently it assumes localhost (see also ssb-serve-blobs/id-to-url)
+    hackURL (url) {
+      const u = new URL(url)
+      u.host = window.location.host
+      return u.href
+    },
     updateAvatar (avatarImage) {
       this.$emit('updateAvatar', avatarImage)
     }

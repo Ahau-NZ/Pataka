@@ -10,7 +10,7 @@
             type="pataka"
             :alt="profile.preferredName"
             class="pb-4"
-            :image="profile.avatarImage"
+            :image="hackUrl(profile.avatarImage)"
           />
           <!-- TODO allow editing the profile -->
           <h1 class="text-uppercase text-center">{{profile.preferredName}}</h1>
@@ -314,6 +314,7 @@ export default {
     }
   },
   methods: {
+
     async toggleDialog () {
       this.dialog = !this.dialog
     },

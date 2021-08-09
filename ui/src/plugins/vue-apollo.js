@@ -18,9 +18,11 @@ Vue.use(VueApollo)
 // Name of the localStorage item
 const AUTH_TOKEN = 'apollo-pataka-token'
 
+const host = window.location.origin.split(':')[0] // assumes no port
+
 // Http endpoint
 const httpEndpoint =
-  process.env.VUE_APP_GRAPHQL_HTTP || `http://localhost:${env.pataka.graphql.port}/graphql`
+  process.env.VUE_APP_GRAPHQL_HTTP || `${host}:${env.pataka.graphql.port}/graphql`
 
 // Call this in the Vue app file
 export function createProvider (options = {}) {
