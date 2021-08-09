@@ -38,12 +38,12 @@
       <v-col cols="12" :sm="mobile ? '12' : '6'" class="pt-2">
         <v-row>
           <v-col cols="12" class="pa-1">
-            <v-text-field 
-              v-model="formData.preferredName" 
-              label="Pātaka name" outlined 
+            <v-text-field
+              v-model="formData.preferredName"
+              label="Pātaka name" outlined
               :rules="nameRules"
               required
-            />          
+            />
           </v-col>
         </v-row>
         <v-row>
