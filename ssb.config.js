@@ -10,6 +10,7 @@ const appPath = envPaths(env.pataka.appName, { suffix: '' }).data
 const configPath = path.join(appPath, 'config')
 
 const core = {
+  password: 'admin',
   path: appPath,
   port: env.pataka.port,
   allowPrivate: true, // used for making local invite codes
@@ -44,6 +45,10 @@ const core = {
 }
 
 let config = null
+
+module.exports = {
+  password: core.password
+}
 
 module.exports = function () {
   if (config) return config

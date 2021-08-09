@@ -60,23 +60,13 @@
               </v-progress-linear>
             </v-row>
           </v-col>
-
         </v-col>
 
         <!-- main body -->
         <v-col cols="8">
-          <!-- meters -->
-          <v-row class="stat-column">
-            <v-col cols=6>
-              <Meter title="CPU" :values="cpuLoad" />
-            </v-col>
-            <v-col cols=6>
-              <Meter title="RAM" :values="memoryLoad" />
-            </v-col>
-          </v-row>
 
           <!-- generate code -->
-          <v-row class="pt-6">
+          <v-row>
             <v-col cols="12">
               <v-btn color="grey" outlined
                 :disabled="network.portForwarding === null"
@@ -89,10 +79,14 @@
             <v-col v-if="generateError">
               <p class="red--text caption mb-0">{{generateError}}</p>
             </v-col>
-            <v-col v-else-if="generatedInvite" cols="12"  class="generated-code pl-10">
-              <v-row align="center">
-                Pātaka single use code:
-                <div class="pa-1 mr-2 my-2" id="invite-code">{{generatedInvite}}</div>
+            <v-col v-else-if="generatedInvite" cols="12"  class="generated-code pl-6">
+              <v-row>
+                <p class="overline pt-2">Pātaka single use code:</p>
+              </v-row>
+              <v-row>
+                <p class="pa-2" id="invite-code">{{generatedInvite}}</p>
+              </v-row>
+              <v-row v-if="!hosted">
                 <v-btn
                   color="grey"
                   outlined
@@ -105,8 +99,18 @@
                   {{copyText}}
                 </v-btn>
               </v-row>
+
             </v-col>
-            <v-col v-else class="generated-code"></v-col>
+          </v-row>
+
+          <!-- meters -->
+          <v-row class="stat-column">
+            <v-col cols=6>
+              <Meter title="CPU" :values="cpuLoad" />
+            </v-col>
+            <v-col cols=6>
+              <Meter title="RAM" :values="memoryLoad" />
+            </v-col>
           </v-row>
 
           <!-- known profiles -->
@@ -193,6 +197,9 @@ export default {
     latency () {
       if (this.network.internetLatency && this.network.internetLatency !== -1) return `${this.network.internetLatency} ms`
       else return 'Unknown'
+    },
+    hosted () {
+      return window.location.hostname !== 'localhost'
     }
   },
   apollo: {
@@ -313,11 +320,13 @@ export default {
       pollInterval: 10 * SECONDS
     }
   },
+
   methods: {
 
     async toggleDialog () {
       this.dialog = !this.dialog
     },
+
     async generateInviteCode (externalIp) {
       const input = externalIp ? {
         external: externalIp
@@ -334,7 +343,6 @@ export default {
               ...input
             }
           }
-
         })
         this.generateError = false
         this.dialog = false
@@ -346,6 +354,7 @@ export default {
         throw err
       }
     },
+
     async tryInvite () {
       // TODO!!!!! This is a hack to allow generating an invite code without port forwarding
       // - the current portForwarding check doesnt seem to be working with mac
@@ -353,6 +362,7 @@ export default {
       if (this.portForwarding) await this.generateInviteCode(this.network.publicIpv4) // eslint-disable-line
       else this.toggleDialog()
     },
+
     async checkPortForwarding () {
       this.checkingPort = true
       this.errorMsg = null
@@ -373,6 +383,7 @@ export default {
       }
       this.checkingPort = false
     },
+
     async copyCode () {
       navigator.clipboard.writeText(this.generatedInvite)
         .then(() => {
@@ -406,12 +417,13 @@ export default {
   min-height: 70px;
 }
 #invite-code {
-  font-size: 0.5em;
+  font-size: 0.9em;
   font-family: monospace;
-  color: grey;
-  background: white;
-  border: 1px solid white;
+  color: lightgrey;
+  background:  #303030;
+  border: 1px solid rgb(4, 132, 196);
   border-radius: 3px;
+  user-select: all;
 }
 .feed-id {
   font-size: 0.9em;
@@ -478,15 +490,6 @@ h2 {
     text-transform: uppercase;
     font-weight: 400;
     letter-spacing: 4px;
-}
-
-@media screen and (min-width: 1280px) {
-  #invite-code {
-    font-size: 0.8em;
-  }
-  .feed-id {
-    font-size: 0.8em;
-  }
 }
 
 </style>

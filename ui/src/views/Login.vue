@@ -28,6 +28,36 @@
         </v-btn>
       </v-row>
     </div>
+    <div v-else-if="!isLoading && isSetup" class="welcome-text" style="justify-items:center;display: grid;">
+      <v-row class="pb-12">
+        <p style="color:darkgrey" class="mb-0 headliner2">enter password</p>
+      </v-row>
+      <v-row class="mt-10">
+        <v-col cols="12">
+          <v-text-field
+            v-model="passwordInput"
+            label="Password" outlined
+            style="background-color: #303030; width:300px"
+            width="150px"
+            type="password"
+            :error-messages="passwordRules"
+          />
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-btn
+          text
+          color="#b12526"
+          style="border-color:#b12526; background-color: #303030;"
+          @click.prevent="checkPassword"
+          outlined
+
+        >
+            <p class="login-text mb-0">submit</p>
+
+        </v-btn>
+      </v-row>
+    </div>
     <!-- <v-btn v-if="!isLoading && !isSetup" text x-large color="#b12526" @click.prevent="toggleNew">
       <v-icon left>mdi-plus</v-icon>
       <p class="mb-0">Create Pātaka</p>
@@ -46,6 +76,8 @@
 import NewNodeDialog from '@/components/NewNodeDialog.vue'
 import gql from 'graphql-tag'
 import pick from 'lodash.pick'
+import { password } from '@/lib/file-helpers'
+import bcrypt from 'bcryptjs'
 
 const karakia = `
 ---------------------------------
@@ -75,13 +107,31 @@ export default {
         preferredName: null,
         avatarImage: null
       },
-      dialog: false
+      dialog: false,
+      passwordInput: '',
+      passwordError: false,
+      passwordRules: []
     }
   },
   mounted () {
     this.getCurrentIdentity()
   },
   methods: {
+    async createPassword (text) {
+      await bcrypt.hash(text, 10, function(err, hash) {
+        if (err) {console.log("error encrypting password: ", err)}
+        else console.log("hash: ", hash)
+      })
+    },
+    checkPassword () {
+      bcrypt.compare(this.passwordInput, password).then((res) => {
+          if (res) {
+            this.karakiaTūwhera()
+            this.$router.push({ name: 'dashboard' })
+          }
+          else this.passwordRules.push('Password incorrect. Try again')
+      });
+    },
     async getCurrentIdentity () {
       const result = await this.$apollo.query({
         query: gql`
@@ -121,10 +171,10 @@ export default {
 
       this.isSetup = Boolean(this.profile.preferredName)
 
-      if (this.isSetup) {
-        this.karakiaTūwhera()
-        this.$router.push({ name: 'dashboard' })
-      }
+      // if (this.isSetup) {
+      //   this.karakiaTūwhera()
+      //   this.$router.push({ name: 'dashboard' })
+      // }
 
       // Shortcut in dev, that saves us from doing one click when testing
       // if (this.isSetup && process.env.NODE_ENV === 'development') {
