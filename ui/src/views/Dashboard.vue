@@ -10,7 +10,7 @@
             type="pataka"
             :alt="profile.preferredName"
             class="pb-4"
-            :image="hackUrl(profile.avatarImage)"
+            :image="profile.avatarImage"
           />
           <!-- TODO allow editing the profile -->
           <h1 class="text-uppercase text-center">{{profile.preferredName}}</h1>
