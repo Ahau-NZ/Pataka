@@ -203,11 +203,32 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .dialog-title {
   font: 'Roboto';
   font-weight: 400;
   font-size: 0.99rem;
   letter-spacing: 0.1666666667em;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
 </style>

@@ -5,7 +5,7 @@
   >
     <template v-slot:content>
       <v-row justify="center">
-        <v-col style="max-width: 500px;">
+        <v-col style="max-width: 300px;">
           <clipper-fixed
             ref="avatar"
             :grid="false"
