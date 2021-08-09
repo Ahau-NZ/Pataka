@@ -314,6 +314,7 @@ export default {
     }
   },
   methods: {
+
     async toggleDialog () {
       this.dialog = !this.dialog
     },
