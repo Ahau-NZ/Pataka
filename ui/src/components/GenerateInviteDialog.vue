@@ -16,15 +16,15 @@
             <v-row justify="start" align="center" class="py-2">
               <div
                 class="dot mr-4"
-                :class="portFowarding ? 'green' : 'orange'"
+                :class="portForwarding ? 'green' : 'orange'"
               />
               <p class="caption text-uppercase text-center ma-0" >
-                {{ portFowarding ? 'Port-Forwarding' :portFowarding === null ? 'Checking' : 'Port-Forwarding Off' }}
+                {{ portForwarding ? 'Port-Forwarding' :portForwarding === null ? 'Checking' : 'Port-Forwarding Off' }}
               </p>
             </v-row>
           </v-col>
         </v-row>
-        <div v-if="!portFowarding">
+        <div v-if="!portForwarding">
           <p>Our portfordward checks indicate that you have not setup portforwarding.</p>
           <p>
             In order for others to connect to this Pātaka over the Internet you'll need to enable
@@ -56,7 +56,7 @@
               v-model="type"
               outlined
               style="max-width:300px"
-              :placeholder=" portFowarding ? 'connect globally over internet' : 'connect locally over wifi'"
+              :placeholder=" portForwarding ? 'connect globally over internet' : 'connect locally over wifi'"
               persistent-placeholder
               autofocus
             ></v-select>
@@ -89,7 +89,7 @@ export default {
     show: { type: Boolean, required: true },
     title: { type: String },
     publicIpv4: { type: String, default: 'xxx.xxx.xx.xx' },
-    portFowarding: { type: Boolean, default: false },
+    portForwarding: { type: Boolean, default: false },
     checkPortForwarding: { type: Function },
     checkingPort: { type: Boolean, default: false },
     errorMsg: { type: String }
