@@ -3,16 +3,7 @@
     <!-- Content Slot -->
     <template v-slot:content>
       <v-col class="py-0" style="color:black">
-        <p>
-          In order for others to connect to this Pātaka over the Internet you'll need to enable
-          <a
-            href="https://en.wikipedia.org/wiki/Port_forwarding"
-            target="_blank"
-          >Port-Forwarding</a> on your router.
-        </p>
-        <p>Bellow is the public IP we detected. Please enable Port-Fowarding and confirm this is the right IP to connect via the internet</p>
-        <p>Alternatively you can also connect locally without the internet via wifi. If you want to do this then please select use local network</p>
-        <v-row class="py-4">
+        <v-row>
           <v-col cols=6>
             <v-text-field
               v-model="ip"
@@ -22,24 +13,55 @@
             />
           </v-col>
           <v-col class="mt-4">
-            <v-btn
-              @click="checkPortForwarding"
-              color="black"
-              class="white--text"
-            >{{checkingPort ? 'Checking' : 'Check Port-Fowarding'}}
-            </v-btn>
+            <v-row justify="start" align="center" class="py-2">
+              <div
+                class="dot mr-4"
+                :class="portFowarding ? 'green' : 'orange'"
+              />
+              <p class="caption text-uppercase text-center ma-0" >
+                {{ portFowarding ? 'Port-Forwarding' :portFowarding === null ? 'Checking' : 'Port-Forwarding Off' }}
+              </p>
+            </v-row>
           </v-col>
         </v-row>
-          <p class="overline">Select number of uses</p>
-          <v-select
-            :items="['single use','100 uses', '1,000 uses', '100,000 uses']"
-            v-model="value"
-            outlined
-            style="max-width:200px"
-            placeholder="single use"
-            persistent-placeholder
-            autofocus
-          ></v-select>
+        <div v-if="!portFowarding">
+          <p>Our portfordward checks indicate that you have not setup portforwarding.</p>
+          <p>
+            In order for others to connect to this Pātaka over the Internet you'll need to enable
+            <a
+              href="https://en.wikipedia.org/wiki/Port_forwarding"
+              target="_blank"
+            >Port-Forwarding</a> on your router.
+          </p>
+          <p>Depending on your router, our portfordwarding checks maybe by inaccurate. If you believe you have correctly setup port forwarding then we recommend that you test generating a code using your internet connection</p>
+          <p>Alternatively you can also connect locally without the internet via wifi. If you want to do this then please select use local network</p>
+        </div>
+        <v-row>
+          <v-col>
+            <p class="overline">Select number of uses</p>
+            <v-select
+              :items="['single use','100 uses', '1,000 uses', '100,000 uses']"
+              v-model="value"
+              outlined
+              style="max-width:300px"
+              placeholder="single use"
+              persistent-placeholder
+              autofocus
+            ></v-select>
+          </v-col>
+          <v-col>
+            <p class="overline">Select connection</p>
+            <v-select
+              :items="['Connect globally over internet', 'Connect locally over wifi']"
+              v-model="type"
+              outlined
+              style="max-width:300px"
+              :placeholder=" portFowarding ? 'connect globally over internet' : 'connect locally over wifi'"
+              persistent-placeholder
+              autofocus
+            ></v-select>
+          </v-col>
+        </v-row>
       </v-col>
 
     </template>
@@ -47,9 +69,9 @@
 
     <!-- Actions Slot -->
     <template v-slot:actions>
-      <v-btn @click="submit('local')" text large class="primary--text my-2">Use local network</v-btn>
-      <v-btn @click="submit('portforward')" text large class="secondary--text my-2">Use internet network</v-btn>
-
+      <div>
+        <v-btn @click="submit()" text large class="primary--text my-2">Generate code</v-btn>
+      </div>
     </template>
     <!-- End Actions Slot -->
   </Dialog>
@@ -74,6 +96,7 @@ export default {
   },
   data () {
     return {
+      type: '',
       value: '',
       externalIp: null
     }
@@ -99,17 +122,11 @@ export default {
     }
   },
   methods: {
-    submit (type) {
-      var Ip = (type === 'local' ? null : this.externalIp || this.publicIpv4)
+    submit () {
+      var Ip = (this.type === 'connect locally over wifi' ? null : this.externalIp || this.publicIpv4)
       this.$emit('generate', { ip: Ip, uses: this.uses })
       this.close()
     },
-    // submit (type) {
-
-    //   const ip = type === 'local' ? null : this.externalIp || this.publicIpv4
-    //   this.$emit('generate', {ip, value: this.value})
-    //   this.close()
-    // },
     close () {
       this.$emit('close')
     }
