@@ -58,6 +58,7 @@
               style="max-width:300px"
               :placeholder=" portForwarding ? 'connect globally over internet' : 'connect locally over wifi'"
               persistent-placeholder
+              :readonly="portForwarding"
               autofocus
             ></v-select>
           </v-col>
@@ -123,7 +124,10 @@ export default {
   },
   methods: {
     submit () {
-      var Ip = (this.type === 'connect locally over wifi' ? null : this.externalIp || this.publicIpv4)
+      console.log(this.externalIp)
+      console.log(this.publicIpv4)
+      var Ip = (this.type === 'Connect locally over wifi' ? null : this.externalIp || this.publicIpv4)
+      console.log(Ip)
       this.$emit('generate', { ip: Ip, uses: this.uses })
       this.close()
     },

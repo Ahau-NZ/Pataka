@@ -89,7 +89,7 @@
             </v-col>
             <v-col v-else-if="generatedInvite" cols="12"  class="generated-code pl-6">
               <v-row>
-                <p class="overline pt-2">Pātaka single use code:</p>
+                <p class="overline pt-2">Pātaka code:</p>
               </v-row>
               <v-row>
                 <p class="pa-2" id="invite-code">{{generatedInvite}}</p>
@@ -158,6 +158,7 @@
       :checkingPort="checkingPort"
       :title="`Generate Invite Code`"
       :errorMsg="errorMsg"
+      :cloudHost="cloudHost"
       @close="toggleDialog"
       @generate="generateInviteCode($event)"
     />
@@ -343,6 +344,7 @@ export default {
         external: ip,
         uses
       } : { uses }
+      console.log('input: ', input)
       try {
         const res = await this.$apollo.mutate({
           mutation: gql`
