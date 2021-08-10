@@ -12,21 +12,36 @@
         </p>
         <p>Bellow is the public IP we detected. Please enable Port-Fowarding and confirm this is the right IP to connect via the internet</p>
         <p>Alternatively you can also connect locally without the internet via wifi. If you want to do this then please select use local network</p>
-        <v-text-field
-          v-model="ip"
-          :error-messages="errorMsg"
-          label="This machines public IP"
-          outlined
-        />
+        <v-row class="py-4">
+          <v-col cols=6>
+            <v-text-field
+              v-model="ip"
+              :error-messages="errorMsg"
+              label="This machines public IP"
+              outlined
+            />
+          </v-col>
+          <v-col class="mt-4">
+            <v-btn
+              @click="checkPortForwarding"
+              color="black"
+              class="white--text"
+            >{{checkingPort ? 'Checking' : 'Check Port-Fowarding'}}
+            </v-btn>
+          </v-col>
+        </v-row>
+          <p class="overline">Select number of uses</p>
+          <v-select
+            :items="['single use','100 uses', '1,000 uses', '100,000 uses']"
+            v-model="value"
+            outlined
+            style="max-width:200px"
+            placeholder="single use"
+            persistent-placeholder
+            autofocus
+          ></v-select>
       </v-col>
-      <v-col class="pb-8">
-        <v-btn
-          @click="checkPortForwarding"
-          color="black"
-          class="white--text"
-        >{{checkingPort ? 'Checking' : 'Check Port-Fowarding'}}
-        </v-btn>
-      </v-col>
+
     </template>
     <!-- End Content Slot -->
 
@@ -59,6 +74,7 @@ export default {
   },
   data () {
     return {
+      value: '',
       externalIp: null
     }
   },
@@ -70,13 +86,30 @@ export default {
       set: function (newValue) {
         this.externalIp = newValue
       }
+    },
+    uses () {
+      switch (this.value) {
+        case 'single use': return 1
+        case '100 uses': return 100
+        case '1,000 uses': return 1000
+        case '100,000 uses': return 100000
+        default:
+          return 1
+      }
     }
   },
   methods: {
     submit (type) {
-      this.$emit('generate', type === 'local' ? null : this.externalIp || this.publicIpv4)
+      var Ip = (type === 'local' ? null : this.externalIp || this.publicIpv4)
+      this.$emit('generate', { ip: Ip, uses: this.uses })
       this.close()
     },
+    // submit (type) {
+
+    //   const ip = type === 'local' ? null : this.externalIp || this.publicIpv4
+    //   this.$emit('generate', {ip, value: this.value})
+    //   this.close()
+    // },
     close () {
       this.$emit('close')
     }

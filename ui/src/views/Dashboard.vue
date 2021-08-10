@@ -59,6 +59,9 @@
                 <span class="caption">{{disk.fs}}</span>
               </v-progress-linear>
             </v-row>
+            <!-- <StorageGraph /> -->
+
+            <!-- Logout button -->
             <v-row align="center" v-if="cloudHost">
               <v-btn class="mt-6" width="100%" color="red" outlined @click="logout">
                 logout
@@ -73,7 +76,7 @@
           <!-- generate code -->
           <v-row>
             <v-col cols="12">
-              <v-btn color="grey" outlined
+              <v-btn color="#53cb62" outlined
                 :disabled="network.portForwarding === null"
                 @click="tryInvite"
               >
@@ -167,6 +170,7 @@ import AvatarGroup from '@/components/AvatarGroup.vue'
 import GenerateInviteDialog from '@/components/GenerateInviteDialog'
 import Meter from '@/components/Meter.vue'
 import gql from 'graphql-tag'
+// import StorageGraph from '@/components/StorageGraph.vue'
 
 const SECONDS = 1000
 
@@ -334,10 +338,11 @@ export default {
       this.dialog = !this.dialog
     },
 
-    async generateInviteCode (externalIp) {
-      const input = externalIp ? {
-        external: externalIp
-      } : {}
+    async generateInviteCode ({ ip, uses }) {
+      const input = ip ? {
+        external: ip,
+        uses
+      } : { uses }
       try {
         const res = await this.$apollo.mutate({
           mutation: gql`
@@ -363,9 +368,10 @@ export default {
     },
 
     async tryInvite () {
-      // TODO!!!!! This is a hack to allow generating an invite code without port forwarding
-      // - the current portForwarding check doesnt seem to be working with mac
-      // - shows port forwarding isnt enabled when it was
+      console.log('trying invite')
+      //   // TODO!!!!! This is a hack to allow generating an invite code without port forwarding
+      //   // - the current portForwarding check doesnt seem to be working with mac
+      //   // - shows port forwarding isnt enabled when it was
       if (this.portForwarding) await this.generateInviteCode(this.network.publicIpv4) // eslint-disable-line
       else this.toggleDialog()
     },
@@ -407,6 +413,7 @@ export default {
     AvatarGroup,
     Meter,
     GenerateInviteDialog
+    // StorageGraph
   }
 }
 </script>
@@ -441,20 +448,20 @@ export default {
   margin: 0 auto;
 }
 .dot {
-  height: 25px;
-  width: 25px;
+  height: 15px;
+  width: 15px;
   background-color: grey;
   border-radius: 50%;
   display: inline-block;
 }
 .green {
-  background-color: green;
+  background-color: rgb(74, 164, 121);
 }
 .orange {
-  background-color: orange;
+  background-color: rgb(201, 158, 79);
 }
 .red {
-  background-color: red;
+  background-color: rgb(165, 50, 50);
 }
 .grey {
   background-color: grey;
