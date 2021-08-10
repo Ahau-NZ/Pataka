@@ -78,7 +78,7 @@
             <v-col cols="12">
               <v-btn color="#53cb62" outlined
                 :disabled="network.portForwarding === null"
-                @click="tryInvite"
+                @click="toggleDialog()"
               >
                 {{!network.ipv4 ? 'Loading network data' : 'Generate join code'}}
               </v-btn>
@@ -368,12 +368,7 @@ export default {
     },
 
     async tryInvite () {
-      console.log('trying invite')
-      //   // TODO!!!!! This is a hack to allow generating an invite code without port forwarding
-      //   // - the current portForwarding check doesnt seem to be working with mac
-      //   // - shows port forwarding isnt enabled when it was
       if (this.portForwarding) await this.generateInviteCode(this.network.publicIpv4) // eslint-disable-line
-      else this.toggleDialog()
     },
 
     async checkPortForwarding () {
@@ -419,7 +414,7 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss">
+<style lang="scss">
 .wrapper {
   // background-color: white;
   width: 100%;
