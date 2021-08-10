@@ -116,8 +116,7 @@ export default {
   },
   computed: {
     cloudHost () {
-      // return window.location.hostname !== 'localhost'
-      return window.location.hostname === 'localhost'
+      return window.location.hostname !== 'localhost'
     }
   },
   mounted () {

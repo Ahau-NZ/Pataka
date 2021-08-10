@@ -204,8 +204,7 @@ export default {
       else return 'Unknown'
     },
     cloudHost () {
-      // return window.location.hostname !== 'localhost'
-      return window.location.hostname === 'localhost'
+      return window.location.hostname !== 'localhost'
     }
   },
   apollo: {
