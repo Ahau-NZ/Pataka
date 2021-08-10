@@ -1,10 +1,10 @@
 <template>
   <div class="wrapper">
     <v-container class="px-12" fluid >
-      <v-row justify="center" class="mt-4">
+      <v-row justify="center">
 
         <!-- sidebar -->
-        <v-col cols="4">
+        <v-col cols="4" class="pt-0">
           <Avatar
             size="180px"
             type="pataka"
@@ -325,15 +325,8 @@ export default {
       pollInterval: 10 * SECONDS
     }
   },
-  mounted () {
-    // this.inactivityTime()
-  },
-  onDestroy () {
-
-  },
   methods: {
     logout () {
-      console.log('logout')
       this.$router.push('/')
     },
 
