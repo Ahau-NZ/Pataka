@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <v-container class="px-12" fluid>
+    <v-container class="px-12" fluid >
       <v-row justify="center" class="mt-4">
 
         <!-- sidebar -->
@@ -59,6 +59,11 @@
                 <span class="caption">{{disk.fs}}</span>
               </v-progress-linear>
             </v-row>
+            <v-row align="center" v-if="cloudHost">
+              <v-btn class="mt-6" width="100%" color="red" outlined @click="logout">
+                logout
+              </v-btn>
+            </v-row>
           </v-col>
         </v-col>
 
@@ -86,7 +91,7 @@
               <v-row>
                 <p class="pa-2" id="invite-code">{{generatedInvite}}</p>
               </v-row>
-              <v-row v-if="!hosted">
+              <v-row v-if="!cloudHost">
                 <v-btn
                   color="grey"
                   outlined
@@ -198,8 +203,9 @@ export default {
       if (this.network.internetLatency && this.network.internetLatency !== -1) return `${this.network.internetLatency} ms`
       else return 'Unknown'
     },
-    hosted () {
-      return window.location.hostname !== 'localhost'
+    cloudHost () {
+      // return window.location.hostname !== 'localhost'
+      return window.location.hostname === 'localhost'
     }
   },
   apollo: {
@@ -320,8 +326,17 @@ export default {
       pollInterval: 10 * SECONDS
     }
   },
+  mounted () {
+    // this.inactivityTime()
+  },
+  onDestroy () {
 
+  },
   methods: {
+    logout () {
+      console.log('logout')
+      this.$router.push('/')
+    },
 
     async toggleDialog () {
       this.dialog = !this.dialog

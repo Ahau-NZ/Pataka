@@ -28,7 +28,7 @@
         </v-btn>
       </v-row>
     </div>
-    <div v-else-if="!isLoading && isSetup" class="welcome-text" style="justify-items:center;display: grid;">
+    <div v-else-if="!isLoading && isSetup && cloudHost" class="welcome-text" style="justify-items:center;display: grid;">
       <v-row class="pb-12">
         <p style="color:darkgrey" class="mb-0 headliner2">enter password</p>
       </v-row>
@@ -41,6 +41,7 @@
             width="150px"
             type="password"
             :error-messages="passwordRules"
+            @keyup.enter="checkPassword"
           />
         </v-col>
       </v-row>
@@ -49,7 +50,7 @@
           text
           color="#b12526"
           style="border-color:#b12526; background-color: #303030;"
-          @click.prevent="checkPassword"
+          @click.prevent="createPassword"
           outlined
 
         >
@@ -113,24 +114,28 @@ export default {
       passwordRules: []
     }
   },
+  computed: {
+    cloudHost () {
+      // return window.location.hostname !== 'localhost'
+      return window.location.hostname === 'localhost'
+    }
+  },
   mounted () {
     this.getCurrentIdentity()
   },
   methods: {
-    async createPassword (text) {
-      await bcrypt.hash(text, 10, function(err, hash) {
-        if (err) {console.log("error encrypting password: ", err)}
-        else console.log("hash: ", hash)
+    async createPassword () {
+      await bcrypt.hash(this.passwordInput, 10, function (err, hash) {
+        if (err) { console.log('error encrypting password: ', err) } else console.log('hash: ', hash)
       })
     },
     checkPassword () {
       bcrypt.compare(this.passwordInput, password).then((res) => {
-          if (res) {
-            this.karakiaTūwhera()
-            this.$router.push({ name: 'dashboard' })
-          }
-          else this.passwordRules.push('Password incorrect. Try again')
-      });
+        if (res) {
+          this.karakiaTūwhera()
+          this.$router.push({ name: 'dashboard' })
+        } else this.passwordRules.push('Password incorrect. Try again')
+      })
     },
     async getCurrentIdentity () {
       const result = await this.$apollo.query({
@@ -171,10 +176,10 @@ export default {
 
       this.isSetup = Boolean(this.profile.preferredName)
 
-      // if (this.isSetup) {
-      //   this.karakiaTūwhera()
-      //   this.$router.push({ name: 'dashboard' })
-      // }
+      if (this.isSetup && !this.cloudHost) {
+        this.karakiaTūwhera()
+        this.$router.push({ name: 'dashboard' })
+      }
 
       // Shortcut in dev, that saves us from doing one click when testing
       // if (this.isSetup && process.env.NODE_ENV === 'development') {

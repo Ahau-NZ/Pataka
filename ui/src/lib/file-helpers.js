@@ -36,4 +36,4 @@ export function uploadFile (input) {
     }
   }
 }
-export const password = '$2a$10$T3MsOGhHz8Jgnij2LVghUe/.enThRbOnHd2iR7EN4mJup6CHPikAq'
+export const password = '$2a$10$8tvJDew.Y.cYfb01hq8nPeq9MpnhneiINRdzS3AsA7AtXZZ0Vt5EG'
