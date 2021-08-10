@@ -78,7 +78,7 @@ body {
     background-color: var(--primary-background);
     background-repeat: no-repeat;
     background-size: cover;
-    background-position-y: -110%;
+    background-position-y: -40%;
   }
   &.page--dashboard {
     background: url(./assets/niho.svg);
