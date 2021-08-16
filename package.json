@@ -20,6 +20,8 @@
   "dependencies": {
     "ahau-env": "^3.0.0",
     "bcryptjs": "^2.4.3",
+    "boxen": "^5.0.1",
+    "chalk": "^4.1.2",
     "electron-updater": "^4.3.8",
     "env-paths": "^2.2.1",
     "lodash.merge": "^4.6.2",
