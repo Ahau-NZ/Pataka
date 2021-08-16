@@ -49,10 +49,6 @@ const core = {
 
 let config = null
 
-module.exports = {
-  password: core.password
-}
-
 module.exports = function () {
   if (config) return config
 
