@@ -2,7 +2,7 @@
   <Dialog :show="show" :title="title" @close="close" width="720px" :goBack="close" enableMenu>
     <!-- Content Slot -->
     <template v-slot:content>
-      <v-col class="py-0" style="color:black">
+      <v-col class="" style="color:black">
         <v-row>
           <v-col cols=6>
             <v-text-field
@@ -52,13 +52,12 @@
           <v-col>
             <p class="overline">Select connection</p>
             <v-select
-              :items="['Connect globally over internet', 'Connect locally over wifi']"
+              :items="portForwarding ? ['Connect globally over internet'] : ['Connect globally over internet', 'Connect locally over wifi']"
               v-model="type"
               outlined
               style="max-width:300px"
               :placeholder=" portForwarding ? 'connect globally over internet' : 'connect locally over wifi'"
               persistent-placeholder
-              :readonly="portForwarding"
               autofocus
             ></v-select>
           </v-col>
@@ -90,7 +89,7 @@ export default {
     show: { type: Boolean, required: true },
     title: { type: String },
     publicIpv4: { type: String, default: 'xxx.xxx.xx.xx' },
-    portForwarding: { type: Boolean, default: false },
+    portForwarding: { type: Boolean, default: true },
     checkPortForwarding: { type: Function },
     checkingPort: { type: Boolean, default: false },
     errorMsg: { type: String }
@@ -124,10 +123,7 @@ export default {
   },
   methods: {
     submit () {
-      console.log(this.externalIp)
-      console.log(this.publicIpv4)
       var Ip = (this.type === 'Connect locally over wifi' ? null : this.externalIp || this.publicIpv4)
-      console.log(Ip)
       this.$emit('generate', { ip: Ip, uses: this.uses })
       this.close()
     },
