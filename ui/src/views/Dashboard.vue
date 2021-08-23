@@ -209,7 +209,7 @@ export default {
       else return 'Unknown'
     },
     cloudHost () {
-      return window.location.hostname !== 'localhost'
+      return window.location.origin !== 'file://' && window.location.hostname !== 'localhost' 
     }
   },
   apollo: {
@@ -344,7 +344,6 @@ export default {
         external: ip,
         uses
       } : { uses }
-      console.log('input: ', input)
       try {
         const res = await this.$apollo.mutate({
           mutation: gql`
@@ -428,7 +427,7 @@ export default {
   min-height: 70px;
 }
 #invite-code {
-  font-size: 0.9em;
+  font-size: 0.8em;
   font-family: monospace;
   color: lightgrey;
   background:  #303030;

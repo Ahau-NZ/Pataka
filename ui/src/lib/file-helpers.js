@@ -26,7 +26,6 @@ const mutation = gql`
 `
 
 export function uploadFile (input) {
-  console.log(input)
   return {
     mutation,
     variables: {

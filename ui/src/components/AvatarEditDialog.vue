@@ -113,7 +113,6 @@ export default {
           uploadFile(input)
         )
 
-        console.log('here')
         if (res.errors) throw res.errors
 
         return res.data.uploadFile
