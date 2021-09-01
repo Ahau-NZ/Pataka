@@ -125,10 +125,10 @@
           <v-row class="pt-6">
             <v-col cols="6" class="stat-column">
               <h2 class="h2 text-uppercase pb-8">People</h2>
-              <p v-if="invitedPeople.length === 0" class="caption">There is no one connected to your network</p>
-              <v-row class="pb-2">
-                <div v-if="invitedPeople && invitedPeople.length > 0">
-                  <AvatarGroup :profiles="invitedPeople" size="60px" showLabel/>
+              <p v-if="!connectedPeople || connectedPeople.length === 0" class="caption">There is no one connected to your network</p>
+              <v-row v-else class="pb-2">
+                <div>
+                  <AvatarGroup :profiles="connectedPeople" size="60px" showLabel/>
                 </div>
               </v-row>
             </v-col>
@@ -210,6 +210,9 @@ export default {
     },
     cloudHost () {
       return window.location.origin !== 'file://' && window.location.hostname !== 'localhost' 
+    },
+    connectedPeople () {
+      return this.invitedPeople.filter(peer => peer.type !== 'pataka')
     }
   },
   apollo: {
