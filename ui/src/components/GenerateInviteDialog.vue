@@ -92,7 +92,8 @@ export default {
     portForwarding: { type: Boolean, default: true },
     checkPortForwarding: { type: Function },
     checkingPort: { type: Boolean, default: false },
-    errorMsg: { type: String }
+    errorMsg: { type: String },
+    cloudHost: { type: Boolean }
   },
   data () {
     return {
@@ -123,7 +124,9 @@ export default {
   },
   methods: {
     submit () {
-      var Ip = (this.type === 'Connect locally over wifi' ? null : this.externalIp || this.publicIpv4)
+      let Ip
+      if (this.cloudHost) Ip = window.location.hostname
+      else Ip = (this.type === 'Connect locally over wifi' ? null : this.externalIp || this.publicIpv4)
       this.$emit('generate', { ip: Ip, uses: this.uses })
       this.close()
     },
