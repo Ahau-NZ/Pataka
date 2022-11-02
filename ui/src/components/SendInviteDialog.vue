@@ -97,13 +97,11 @@ export default {
     },
     send () {
       this.sending = true
-      console.log('send invites to: ', this.invitees)
       const obj = {
         emails: this.invitees.length ? this.invitees : this.input,
         code: this.code,
         name: this.name
       }
-      console.log('client data: ', obj)
       const data = new FormData()
       data.append('json', JSON.stringify(obj))
       fetch('https://ahau.io/sendInvite', {
@@ -114,13 +112,11 @@ export default {
       }).then((res) => {
         if (res.status === 200) {
           this.sending = false
-          console.log('email successfully sent')
           this.$emit('codeSent')
           this.close()
         } else {
           this.sending = false
           this.errorMsg = 'Error sending code. Please send manually'
-          console.log('email failed')
         }
       })
       this.$emit('codeSent')
@@ -131,13 +127,11 @@ export default {
       this.$emit('close')
     },
     remove (item) {
-      console.log('remove item', item)
       this.invitees.splice(this.invitees.indexOf(item), 1)
     },
     removeLast () {
       if (this.$refs.input.focus && !this.input.length && this.invitees.length) {
         this.count++
-        console.log('count: ', this.count)
         if (this.count > 1) this.invitees.pop()
         setTimeout(() => this.$refs.input.focus(), 100)
       }
