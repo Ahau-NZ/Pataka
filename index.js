@@ -8,59 +8,58 @@ const { autoUpdater } = require('electron-updater')
 const Config = require('./ssb.config')
 const karakia = require('./karakia')
 
-const plugins = [
-  'ssb-db',
-  'ssb-master',
-  'ssb-unix-socket',
-  'ssb-no-auth',
+ahoy(
+  env.isDevelopment
+    ? 'http://localhost:8081' // dev-server
+    : `file://${__dirname}/dist/index.html`, // production build,
+  {
+    title: 'Pātaka',
+    config: Config(),
+    plugins: [
+      require('ssb-db'),
+      // require('ssb-master'),
+      // require('ssb-unix-socket'),
+      // require('ssb-no-auth'),
+      require('ssb-conn'),
+      require('ssb-lan'),
+      require('ssb-replicate'),
+      require('ssb-friends'),
 
-  'ssb-conn',
-  'ssb-lan',
-  'ssb-replicate',
-  'ssb-friends',
+      require('ssb-blobs'),
+      require('ssb-serve-blobs'),
+      require('ssb-hyper-blobs'),
 
-  'ssb-blobs',
-  'ssb-serve-blobs',
-  'ssb-hyper-blobs',
+      require('ssb-query'),
+      require('ssb-backlinks'),
 
-  'ssb-query',
-  'ssb-backlinks',
+      require('ssb-tribes'), // TODO disable attempting decryption
+      // require('ssb-tribes-registration'),
 
-  'ssb-settings',
-  'ssb-profile',
-  // 'ssb-story',
-  // 'ssb-artefact',
-  // 'ssb-whakapapa',
+      require('ssb-profile'),
+      require('ssb-settings'),
+      // require('ssb-story'),
+      // require('ssb-artefact'),
+      // require('ssb-whakapapa'),
 
-  'ssb-invite',
-  'ssb-tribes', // TODO disable attempting decryption
-  'ssb-pataka',
-  'ssb-recps-guard'
-]
-
-const appURL = env.isDevelopment
-  ? 'http://localhost:8081' // dev-server
-  : `file://${join(__dirname, '/dist/index.html')}` // production build
-
-ahoy({
-  title: 'Pātaka',
-  config: Config(),
-  plugins,
-  appURL,
-  // appDir: '../../AHAU/pataka', // only use this when ssb-ahoy symlinked
-  onReady: ({ config }) => {
+      require('ssb-invite'),
+      require('ssb-recps-guard'),
+      require('ssb-pataka'),
+    ]
+  },
+  (err, ssb) => {
+    if (err) throw err
     // this config has updated manifest added
 
     /* Karakia tūwhera */
     karakia()
 
-    printConfig(config)
+    printConfig(ssb.config)
 
     if (env.isProduction) {
       autoUpdater.checkForUpdatesAndNotify()
     }
   }
-})
+)
 
 function printConfig (config) {
   const envName = env.isProduction ? '' : ` ${env.name.toUpperCase()} `
