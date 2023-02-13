@@ -209,7 +209,7 @@ export default {
       else return 'Unknown'
     },
     cloudHost () {
-      return window.location.origin !== 'file://' && window.location.hostname !== 'localhost' 
+      return window.location.origin !== 'file://' && window.location.hostname !== 'localhost'
     },
     connectedPeople () {
       return this.invitedPeople.filter(peer => peer.type !== 'pataka')
