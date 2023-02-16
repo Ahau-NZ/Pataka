@@ -94,6 +94,7 @@ export default {
     checkingPort: { type: Boolean, default: false },
     errorMsg: { type: String },
     cloudHost: { type: Boolean }
+    // this is for when the pataka UI is being run in the cloud via pataka-cli
   },
   data () {
     return {
