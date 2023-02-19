@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <Appbar v-if="displayAppbar" />
+    <AppBar v-if="displayAppBar" />
     <v-main>
       <router-view />
     </v-main>
@@ -13,7 +13,7 @@
 
 <script>
 import { createNamespacedHelpers } from 'vuex'
-import Appbar from '@/components/Appbar.vue'
+import AppBar from '@/components/AppBar.vue'
 const { version } = require('../../package.json')
 const { mapActions: mapAnalyticsActions } = createNamespacedHelpers('analytics')
 
@@ -37,7 +37,7 @@ export default {
     interval = setInterval(this.patakaPing, 10 * MIN) // gets throttled in actions
   },
   computed: {
-    displayAppbar () {
+    displayAppBar () {
       if (this.$route.name === 'login') return false
       else return true
     }
@@ -54,7 +54,7 @@ export default {
     }
   },
   components: {
-    Appbar
+    AppBar
   }
 }
 </script>

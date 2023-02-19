@@ -1,41 +1,22 @@
 import Vue from 'vue'
 import VueApollo from 'vue-apollo'
-import { ApolloClient, InMemoryCache } from '@apollo/client'
-import { createUploadLink } from 'apollo-upload-client' // partners with graphql-upload
-import { IntrospectionFragmentMatcher } from 'apollo-cache-inmemory'
+import Client from 'ahau-graphql-client'
 
 import possibleTypes from './possibleTypes.json'
 
 const env = require('ahau-env')()
-
-const fragmentMatcher = new IntrospectionFragmentMatcher({
-  introspectionQueryResultData: possibleTypes
-})
+// Name of the localStorage item
+const AUTH_TOKEN = 'apollo-pataka-token'
+// Http endpoint
+const httpEndpoint =
+  process.env.VUE_APP_GRAPHQL_HTTP || `http://localhost:${env.pataka.graphql.port}/graphql`
 
 // Install the vue plugin
 Vue.use(VueApollo)
 
-// Name of the localStorage item
-const AUTH_TOKEN = 'apollo-pataka-token'
-
-const host = window.location.origin === 'file://'
-  ? 'http://localhost'
-  : window.location.origin.split(':')[1] // assumes no port
-
-const httpEndpoint =
-  process.env.VUE_APP_GRAPHQL_HTTP || `${host}:${env.pataka.graphql.port}/graphql`
-
 // Call this in the Vue app file
-export function createProvider (options = {}) {
-  // Create apollo client
-  const apolloClient = new ApolloClient({
-    ...options,
-    ssrMode: typeof window === 'undefined',
-    cache: new InMemoryCache({
-      fragmentMatcher
-    }),
-    link: createUploadLink({ uri: httpEndpoint })
-  })
+export function createProvider (opts = {}) {
+  const apolloClient = new Client(httpEndpoint, { possibleTypes, ...opts })
 
   // Create vue apollo provider
   const apolloProvider = new VueApollo({

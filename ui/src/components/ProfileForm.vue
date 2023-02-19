@@ -86,7 +86,7 @@ export default {
         valid: true,
         showDescription: false
       },
-      nameRules: [ v => !!v || 'Pataka name required' ]
+      nameRules: [v => !!v || 'Pataka name required']
     }
   }
 }

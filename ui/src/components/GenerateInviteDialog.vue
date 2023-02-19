@@ -123,7 +123,7 @@ export default {
   },
   methods: {
     submit () {
-      var Ip = (this.type === 'Connect locally over wifi' ? null : this.externalIp || this.publicIpv4)
+      const Ip = (this.type === 'Connect locally over wifi' ? null : this.externalIp || this.publicIpv4)
       this.$emit('generate', { ip: Ip, uses: this.uses })
       this.close()
     },

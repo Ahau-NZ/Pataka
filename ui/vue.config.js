@@ -1,3 +1,4 @@
+const webpack = require('webpack')
 const dotenv = require('dotenv')
 const { join } = require('path')
 
@@ -21,12 +22,31 @@ process.env.VUE_APP_PLATFORM = 'web'
 module.exports = {
   publicPath: './',
   devServer: {
-    port: 8081
+    port: process.env.DEV_SERVER_PORT || 8081
   },
   transpileDependencies: ['vuetify'],
   pluginOptions: {
     apollo: {
       lintGQL: true
     }
+  },
+  configureWebpack: {
+    // webpack 5 removed default-on polyfills for many Node modules
+    // the following config is about providing browser-friendly replacements
+
+    resolve: {
+      fallback: {
+        path: require.resolve('path-browserify')
+      }
+    },
+    plugins: [
+      new webpack.DefinePlugin({
+        'global.Date': 'globalThis.Date' // required for edtf
+      }),
+      new webpack.ProvidePlugin({
+        Buffer: ['buffer', 'Buffer'],
+        process: 'process/browser'
+      })
+    ]
   }
 }
