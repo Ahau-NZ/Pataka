@@ -204,15 +204,14 @@ export default {
 
       const result = await this.$apollo.mutate({
         mutation: gql`
-          mutation($input: ProfileInput!) {
-            saveProfile(input: $input)
+          mutation($input: PatakaProfileInput!) {
+            savePataka(input: $input)
           }
         `,
         variables: {
           input: {
             id: this.profile.id,
-            ...newProfile,
-            allowPublic: true
+            ...newProfile
           }
         }
       })

@@ -85,13 +85,11 @@ export default {
             image.mimeType = file.type
           }
 
-          console.log(JSON.stringify(image, null, 2))
-
           // NOTE: ssb-profile blobs uses blob.blob not blob.blobId (which are the artefact style)
           if (image.blobId) image.blob = image.blobId
           delete image.blobId
 
-          let cleanImage = {}
+          const cleanImage = {}
           Object.entries(image).forEach(([key, value]) => {
             if (key === '__typename') return
             if (key === 'type') return
@@ -100,7 +98,7 @@ export default {
           this.$emit('submit', cleanImage)
         })
       } catch (error) {
-        throw error
+        console.error('Error editing avatar', error)
       }
     },
     async uploadFile (input) {

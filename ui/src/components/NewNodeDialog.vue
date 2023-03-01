@@ -57,8 +57,8 @@ export default {
       return this.$vuetify.breakpoint.xs
     },
     submission () {
-      let submission = {}
-      Object.entries(this.formData).map(([key, value]) => {
+      const submission = {}
+      Object.entries(this.formData).forEach(([key, value]) => {
         if (!isEmpty(this.formData[key])) submission[key] = value
       })
 

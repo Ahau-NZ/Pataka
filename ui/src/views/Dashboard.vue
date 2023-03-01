@@ -200,8 +200,8 @@ export default {
       publicIpv4: null
     },
     diskUsage: [],
-    cpuLoad: [ 0, 0 ],
-    memoryLoad: [ 0, 0 ]
+    cpuLoad: [0, 0],
+    memoryLoad: [0, 0]
   }),
   computed: {
     latency () {
@@ -271,7 +271,7 @@ export default {
         } else if (this.cpuLoad[0] === 0) {
           this.cpuLoad.shift()
         }
-        return [ ...this.cpuLoad, data.cpuLoad ]
+        return [...this.cpuLoad, data.cpuLoad]
       }
     },
     memoryLoad: {
@@ -285,7 +285,7 @@ export default {
         } else if (this.memoryLoad[0] === 0) {
           this.memoryLoad.shift()
         }
-        return [ ...this.memoryLoad, data.memoryLoad ]
+        return [...this.memoryLoad, data.memoryLoad]
       }
     },
     diskUsage: {
@@ -343,10 +343,12 @@ export default {
     },
 
     async generateInviteCode ({ ip, uses }) {
-      const input = ip ? {
-        external: ip,
-        uses
-      } : { uses }
+      const input = ip
+        ? {
+            external: ip,
+            uses
+          }
+        : { uses }
       try {
         const res = await this.$apollo.mutate({
           mutation: gql`
