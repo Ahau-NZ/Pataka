@@ -63,13 +63,22 @@ module.exports = {
 
   win: {
     icon: 'build/win/icon.ico',
-    publisherName: ['Āhau NZ Limited']
+    publisherName: [
+      'Ahau NZ Ltd', //        name that will probably happen
+      'Ä€hau NZ Ltd', //     << current name
+      'Ä€hau NZ Limited', //    last name
+      'Ahau NZ Limited' //     oldest name
+    ],
     // WARNING - this name must exactly match the subject/ "issued to" field on the Signing Certificate
     // In future if this name changes, auto-updating will fail D:
+    certificateSha1: '8BD3CF2F9D2CF6EB7E4EFF9F3890443CF7FC41F8'
+    // This is a way to be VERY specific about the exact certificate used. This worked well with EV signing cert.
   },
   nsis: {
     artifactName: '${name}-Windows-${version}.${ext}', // eslint-disable-line
-    installerIcon: 'build/win/setup-icon.ico'
+    installerIcon: 'build/win/setup-icon.ico',
+    include: 'build/win/add-missing-dll.nsh' // fixes missing VCRUNTIME140.dll
+    // source: https://github.com/sodium-friends/sodium-native/issues/100
   },
 
   publish: [{
