@@ -15,9 +15,12 @@
             <v-overlay
               absolute
               opacity="0.5"
-              :value="hover && showLabel"
+              :value="hover"
             >
-              <p class="text-center pt-2" style="font-size:12px">{{alt}}</p>
+              <p v-if="showLabel" class="text-center pt-2" style="font-size:12px">{{alt}}</p>
+              <v-icon v-else-if="showEdit" @click="$emit('edit')">
+                mdi-pencil
+              </v-icon>
             </v-overlay>
           </v-avatar>
         </v-hover>
@@ -40,6 +43,7 @@ export default {
     type: { type: String, default: 'person' },
     size: { type: String, default: '25vh' },
     showLabel: { type: Boolean, default: false },
+    showEdit: { type: Boolean, default: false },
     clickable: { type: Boolean, default: false },
     isEditing: { type: Boolean, default: false },
     offline: { type: Boolean, default: false },

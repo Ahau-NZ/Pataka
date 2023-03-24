@@ -5,16 +5,29 @@
 
         <!-- sidebar -->
         <v-col cols="4" class="pt-0">
-          <Avatar
-            size="180px"
-            type="pataka"
-            :alt="profile.preferredName"
-            class="pb-4"
-            :image="profile.avatarImage"
+          <v-progress-circular
+            v-if="loading"
+            :width="3"
+            color="#0484c4"
+            indeterminate
+            class="d-flex ma-auto"
+            absolute
           />
-          <!-- TODO allow editing the profile -->
-          <h1 class="text-uppercase text-center">{{profile.preferredName}}</h1>
-          <p class="grey--text text-center caption overflow-wrap">{{profile.feedId}}</p>
+          <div v-else>
+            <v-hover :value="true">
+              <Avatar
+                size="180px"
+                type="pataka"
+                :alt="profile.preferredName"
+                class="pb-4"
+                :image="profile.avatarImage"
+                showEdit
+                @edit="toggleEditDialog"
+              />
+            </v-hover>
+            <h1 class="text-uppercase text-center">{{profile.preferredName}}</h1>
+            <p class="grey--text text-center caption overflow-wrap">{{profile.description}}</p>
+          </div>
           <v-col cols="7" class="mx-auto mt-8">
 
             <!-- network status -->
@@ -162,6 +175,14 @@
       @close="toggleDialog"
       @generate="generateInviteCode($event)"
     />
+    <NewNodeDialog
+      v-if="editNodeDialog"
+      :show="editNodeDialog"
+      :title="`Āhau Pātaka`"
+      :profile="profile"
+      @close="toggleEditDialog"
+      @save="save($event)"
+    />
   </div>
 </template>
 
@@ -171,6 +192,8 @@ import AvatarGroup from '@/components/AvatarGroup.vue'
 import GenerateInviteDialog from '@/components/GenerateInviteDialog'
 import Meter from '@/components/Meter.vue'
 import gql from 'graphql-tag'
+import NewNodeDialog from '@/components/NewNodeDialog.vue'
+import pick from 'lodash.pick'
 // import StorageGraph from '@/components/StorageGraph.vue'
 
 const SECONDS = 1000
@@ -190,6 +213,7 @@ export default {
     profile: {
       feedId: '',
       preferredName: '',
+      description: '',
       avatarImage: null
     },
     portForwarding: null,
@@ -201,8 +225,14 @@ export default {
     },
     diskUsage: [],
     cpuLoad: [0, 0],
-    memoryLoad: [0, 0]
+    memoryLoad: [0, 0],
+    editNodeDialog: false,
+    loading: false
   }),
+  mounted () {
+    this.loading = true
+    this.getCurrentIdentity()
+  },
   computed: {
     latency () {
       if (this.network.internetLatency && this.network.internetLatency !== -1) return `${this.network.internetLatency} ms`
@@ -216,29 +246,6 @@ export default {
     }
   },
   apollo: {
-    profile: {
-      query: gql`query {
-        whoami {
-          public {
-          feedId
-          profile {
-            id
-            preferredName
-            avatarImage {
-              uri
-            }
-          }
-          }
-        }
-      }`,
-      update (data) {
-        if (!data.whoami.public.profile || !data.whoami.public.profile.preferredName) this.$router.push({ name: 'login' })
-        return {
-          ...data.whoami.public.profile,
-          feedId: data.whoami.public.feedId
-        }
-      }
-    },
     network: {
       query: gql`query {
         network {
@@ -334,14 +341,48 @@ export default {
     }
   },
   methods: {
+    async getCurrentIdentity () {
+      const result = await this.$apollo.query({
+        query: gql`
+          {
+            whoami {
+              public {
+                profile {
+                  id
+                  preferredName
+                  description
+                  avatarImage {
+                    uri
+                  }
+                }
+              }
+            }
+          }
+        `,
+        fetchPolicy: 'no-cache'
+      })
+
+      if (result.errors) {
+        this.loading = false
+        throw result.errors
+      } else {
+        this.loading = false
+        if (!result.data.whoami.public.profile || !result.data.whoami.public.profile.preferredName) return this.$router.push({ name: 'login' })
+        this.profile = {
+          ...result.data.whoami.public.profile,
+          feedId: result.data.whoami.public.feedId
+        }
+      }
+    },
     logout () {
       this.$router.push('/')
     },
-
-    async toggleDialog () {
+    toggleDialog () {
       this.dialog = !this.dialog
     },
-
+    toggleEditDialog () {
+      this.editNodeDialog = !this.editNodeDialog
+    },
     async generateInviteCode ({ ip, uses }) {
       const input = ip
         ? {
@@ -407,13 +448,40 @@ export default {
           // This can happen if the user denies clipboard permissions:
           console.error('Could not copy text: ', err)
         })
+    },
+    async save (profileChanges) {
+      this.loading = true
+      const newProfile = pick(profileChanges,
+        'preferredName',
+        'description',
+        'avatarImage'
+      )
+      // TODO replace this with graphql mixin?
+      if (newProfile.avatarImage) delete newProfile.avatarImage.uri
+
+      const result = await this.$apollo.mutate({
+        mutation: gql`
+          mutation($input: PatakaProfileInput!) {
+            savePataka(input: $input)
+          }
+        `,
+        variables: {
+          input: {
+            id: this.profile.id,
+            ...newProfile
+          }
+        }
+      })
+      if (result.errors) console.error('failed to update profile', result)
+      else this.getCurrentIdentity()
     }
   },
   components: {
     Avatar,
     AvatarGroup,
     Meter,
-    GenerateInviteDialog
+    GenerateInviteDialog,
+    NewNodeDialog
     // StorageGraph
   }
 }
@@ -445,8 +513,8 @@ export default {
 }
 .overflow-wrap {
   overflow-wrap: break-word;
-  width: 50%;
-  margin: 0 auto;
+  width: 80%;
+  margin: 10px auto;
 }
 .dot {
   height: 15px;

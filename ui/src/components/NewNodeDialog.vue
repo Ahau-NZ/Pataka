@@ -3,7 +3,10 @@
     <!-- Content Slot -->
     <template v-slot:content>
       <v-col class="py-0">
-        <ProfileForm :profile.sync="formData" :mobile="mobile" />
+        <ProfileForm
+          :profile.sync="formData"
+          :mobile="mobile"
+        />
       </v-col>
     </template>
     <!-- End Content Slot -->
@@ -25,17 +28,8 @@
 import Dialog from '@/components/Dialog.vue'
 import ProfileForm from '@/components/ProfileForm.vue'
 import isEmpty from 'lodash.isempty'
-
-function setDefaultData () {
-  const formData = {
-    id: '',
-    preferredName: '',
-    avatarImage: {},
-    description: ''
-  }
-
-  return formData
-}
+import isEqual from 'lodash.isequal'
+import clone from 'lodash.clone'
 
 export default {
   name: 'NewNodeDialog',
@@ -45,11 +39,21 @@ export default {
   },
   props: {
     show: { type: Boolean, required: true },
-    title: { type: String, default: 'Create a new Pātaka' }
+    title: { type: String, default: 'Create a new Pātaka' },
+    profile: { type: Object, default: () => ({}) }
   },
   data () {
     return {
-      formData: setDefaultData()
+      formData: {}
+    }
+  },
+  watch: {
+    profile: {
+      deep: true,
+      immediate: true,
+      handler (newVal) {
+        this.formData = clone(newVal)
+      }
     }
   },
   computed: {
@@ -61,14 +65,23 @@ export default {
       Object.entries(this.formData).forEach(([key, value]) => {
         if (!isEmpty(this.formData[key])) submission[key] = value
       })
-
       return submission
     }
   },
   methods: {
+    getProfileChanges  () {
+      const changes = {}
+      Object.entries(this.submission).forEach(([key, value]) => {
+        if (!isEqual(this.submission[key], this.profile[key])) {
+          changes[key] = value
+        }
+      })
+      return changes
+    },
     submit () {
       if (this.submission && !this.submission.preferredName) return
-      this.$emit('create', this.submission)
+      const profileChanges = this.getProfileChanges(this.submission)
+      this.$emit('save', profileChanges)
       this.close()
     },
     close () {
@@ -76,7 +89,7 @@ export default {
       this.$emit('close')
     },
     resetFormData () {
-      this.formData = setDefaultData()
+      this.formData = {}
     }
 
   }

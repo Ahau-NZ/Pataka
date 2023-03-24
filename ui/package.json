@@ -4,12 +4,12 @@
   "description": "A pub application for the Ahau ecosystem. Built using scuttlebutt",
   "homepage": "https://gitlab.com/ahau/whakapapa-ora",
   "scripts": {
-    "dev": "vue-cli-service serve --port 8081",
+    "dev": "cross-env DEV_SERVER_PORT=8081 vue-cli-service serve",
     "build": "vue-cli-service build --dest ../dist",
     "lint": "vue-cli-service lint",
     "test:js": "tape -r 'esm' 'src/**/*.test.js' | tap-arc",
     "test": "npm run test:js && npm run lint",
-    "build-fragment": "NODE_ENV=development node src/schemaQuery.js"
+    "build-fragment": "cross-env NODE_ENV=development node src/schemaQuery.js"
   },
   "dependencies": {
     "@mdi/font": "^4.5.95",

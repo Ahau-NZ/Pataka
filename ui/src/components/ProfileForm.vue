@@ -4,7 +4,6 @@
       <!-- Upload profile photo -->
       <v-col :order="mobile ? '' : '2'" class="pt-6">
         <v-row class="justify-center pt-3">
-          <!-- <v-col cols="12" class="pa-0" > -->
           <!-- Avatar -->
           <Avatar
             class="big-avatar"
@@ -12,20 +11,13 @@
             type="pataka"
             :image="formData.avatarImage"
             :alt="formData.preferredName"
-            :isEditing="isEditing"
             :isView="false"
             @updateAvatar="formData.avatarImage = $event"
           />
         </v-row>
-        <v-row v-if="isEditing" class="justify-center">
-          <v-btn @click="$emit('cancel')" color="white" text medium class="blue--text">
-            <v-icon small class="blue--text" left>mdi-close</v-icon>Cancel
-          </v-btn>
-        </v-row>
         <v-row>
-          <!-- </v-col> -->
           <!-- Upload Profile Photo Button -->
-          <v-col v-if="!isEditing" cols="12" justify="center" align="center" class="pa-0">
+          <v-col cols="12" justify="center" align="center" class="pa-0">
             <ImagePicker
               @updateAvatar="formData.avatarImage = $event"
               :avatarLoaded="formData.avatarImage"
@@ -76,17 +68,25 @@ export default {
   },
   props: {
     profile: { type: Object, required: true },
-    mobile: { type: Boolean, default: false },
-    isEditing: { type: Boolean, default: false }
+    mobile: { type: Boolean, default: false }
   },
   data () {
     return {
-      formData: this.profile,
+      formData: {},
       form: {
         valid: true,
         showDescription: false
       },
       nameRules: [v => !!v || 'Pataka name required']
+    }
+  },
+  watch: {
+    profile: {
+      deep: true,
+      immediate: true,
+      handler (newVal) {
+        this.formData = newVal
+      }
     }
   }
 }
