@@ -12,11 +12,9 @@
             indeterminate
             class="d-flex ma-auto"
             absolute
-          ></v-progress-circular>     
+          />
           <div v-else>
-            <v-hover
-              v-slot="{ hover }"
-            > 
+            <v-hover :value="true">
               <Avatar
                 size="180px"
                 type="pataka"
@@ -183,7 +181,7 @@
       :title="`Āhau Pātaka`"
       :profile="profile"
       @close="toggleEditDialog"
-      @create="save($event)"
+      @save="save($event)"
     />
   </div>
 </template>
@@ -463,24 +461,19 @@ export default {
 
       const result = await this.$apollo.mutate({
         mutation: gql`
-          mutation($input: ProfileInput!) {
-            saveProfile(input: $input)
+          mutation($input: PatakaProfileInput!) {
+            savePataka(input: $input)
           }
         `,
         variables: {
           input: {
             id: this.profile.id,
-            ...newProfile,
-            allowPublic: true
+            ...newProfile
           }
         }
       })
-      if (result.errors) {
-        console.error('failed to update profile', result)
-        return
-      } else {
-        this.getCurrentIdentity()
-      }
+      if (result.errors) console.error('failed to update profile', result)
+      else this.getCurrentIdentity()
     }
   },
   components: {

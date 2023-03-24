@@ -68,7 +68,7 @@
       :show="dialog"
       :title="`Āhau Pātaka`"
       @close="toggleNew"
-      @create="save($event)"
+      @save="save($event)"
     />
   </div>
 </template>

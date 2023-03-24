@@ -87,7 +87,7 @@ export default {
       handler (newVal) {
         this.formData = newVal
       }
-    },
+    }
   }
 }
 </script>

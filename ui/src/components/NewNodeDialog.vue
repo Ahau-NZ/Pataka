@@ -3,7 +3,10 @@
     <!-- Content Slot -->
     <template v-slot:content>
       <v-col class="py-0">
-        <ProfileForm :profile.sync="formData" :mobile="mobile"/>
+        <ProfileForm
+          :profile.sync="formData"
+          :mobile="mobile"
+        />
       </v-col>
     </template>
     <!-- End Content Slot -->
@@ -37,7 +40,7 @@ export default {
   props: {
     show: { type: Boolean, required: true },
     title: { type: String, default: 'Create a new Pātaka' },
-    profile: { type: Object, default: {} }
+    profile: { type: Object, default: () => ({}) }
   },
   data () {
     return {
@@ -51,7 +54,7 @@ export default {
       handler (newVal) {
         this.formData = clone(newVal)
       }
-    },
+    }
   },
   computed: {
     mobile () {
@@ -78,7 +81,7 @@ export default {
     submit () {
       if (this.submission && !this.submission.preferredName) return
       const profileChanges = this.getProfileChanges(this.submission)
-      this.$emit('create', profileChanges)
+      this.$emit('save', profileChanges)
       this.close()
     },
     close () {
