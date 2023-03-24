@@ -6,7 +6,7 @@
   "scripts": {
     "postinstall": "electron-builder install-app-deps && cd ui && npm i",
     "start": "electron index.js -- --title Pātaka",
-    "dev": "cross-env NODE_ENV=development electron index.js -- --title Pātaka",
+    "dev": "cross-env NODE_ENV=development DEV_SERVER_PORT=8081 electron index.js -- --title Pātaka",
     "serve": "cd ui && npm run dev",
     "build:ui": "cd ui && npm run build",
     "build:icons": "node build/build-icons.js",

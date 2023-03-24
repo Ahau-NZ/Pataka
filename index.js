@@ -1,6 +1,5 @@
 const ahoy = require('ssb-ahoy')
 const env = require('ahau-env')()
-const { join } = require('path')
 const chalk = require('chalk')
 const boxen = require('boxen')
 const { autoUpdater } = require('electron-updater')
