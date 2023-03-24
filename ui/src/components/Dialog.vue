@@ -50,11 +50,11 @@
           <v-icon>mdi-close</v-icon>
         </v-btn>
       </v-app-bar>
-      <v-card-text :style="mobile ? 'overflow-x: hidden;' : `max-height: 650px; overflow-x: hidden;`" class="pa-3 pb-0">
+      <v-card-text :style="mobile ? 'overflow-x: hidden;' : `max-height: 650px; overflow-x: hidden;`" class="pa-3">
         <slot name="content"></slot>
       </v-card-text>
       <v-divider/>
-      <v-card-actions v-if="!readonly" class="pa-0">
+      <v-card-actions v-if="!hideActions" class="pa-0">
         <v-container class="py-0">
           <v-row align="end" class="ma-0">
             <v-col cols="12" md="auto" v-if="$slots['before-actions']" :align="mobile ? 'center':'start'" class="py-0">
@@ -123,7 +123,7 @@ export default {
     },
     title: String,
     dark: Boolean,
-    readonly: Boolean
+    hideActions: Boolean
   },
   data () {
     return {

@@ -89,7 +89,15 @@
           <!-- generate code -->
           <v-row>
             <v-col cols="12">
-              <v-btn color="#53cb62" outlined
+              <v-progress-circular
+                v-if="generatingCode"
+                indeterminate
+                color="#0484c4"
+                width="2"
+              ></v-progress-circular>
+              <v-btn
+                v-else
+                color="#53cb62" outlined
                 :disabled="network.portForwarding === null"
                 @click="toggleDialog()"
               >
@@ -107,9 +115,10 @@
               <v-row>
                 <p class="pa-2" id="invite-code">{{generatedInvite}}</p>
               </v-row>
-              <v-row v-if="!cloudHost">
+              <v-row>
                 <v-btn
-                  color="grey"
+                  v-if="!cloudHost"
+                  color="#0484c4"
                   outlined
                   class="text-uppercase"
                   justify="end"
@@ -118,6 +127,11 @@
                   <v-icon v-if="copyText === 'Copy'" small left>mdi-content-copy</v-icon>
                   <v-icon v-else small left>mdi-check</v-icon>
                   {{copyText}}
+                </v-btn>
+                <v-btn class="ml-6" color="#cb53a5" outlined
+                  @click="toggleInviteDialog()"
+                >
+                  send invite
                 </v-btn>
               </v-row>
 
@@ -183,6 +197,23 @@
       @close="toggleEditDialog"
       @save="save($event)"
     />
+    <SendInviteDialog
+      v-if="inviteDialog"
+      :show="inviteDialog"
+      :title="`Send Pātaka Invite Code`"
+      :errorMsg="errorMsg"
+      :uses="uses"
+      :code="generatedInvite"
+      :name="profile.preferredName"
+      @close="toggleInviteDialog"
+      @codeSent="showSnackbar('Code successfully sent')"
+    />
+    <Snackbar
+      v-if="snackbar"
+      :show="snackbar"
+      :message="snackbarMsg"
+      @clearSnackbar="clearSnackbar"
+    />
   </div>
 </template>
 
@@ -190,6 +221,8 @@
 import Avatar from '@/components/Avatar.vue'
 import AvatarGroup from '@/components/AvatarGroup.vue'
 import GenerateInviteDialog from '@/components/GenerateInviteDialog'
+import SendInviteDialog from '@/components/SendInviteDialog'
+import Snackbar from '@/components/Snackbar'
 import Meter from '@/components/Meter.vue'
 import gql from 'graphql-tag'
 import NewNodeDialog from '@/components/NewNodeDialog.vue'
@@ -226,8 +259,13 @@ export default {
     diskUsage: [],
     cpuLoad: [0, 0],
     memoryLoad: [0, 0],
+    loading: false,
     editNodeDialog: false,
-    loading: false
+    inviteDialog: null,
+    uses: null,
+    generatingCode: false,
+    snackbar: false,
+    snackbarMsg: ''
   }),
   mounted () {
     this.loading = true
@@ -374,22 +412,32 @@ export default {
         }
       }
     },
+    showSnackbar (msg) {
+      this.snackbarMsg = msg
+      this.snackbar = true
+    },
+    clearSnackbar () {
+      this.snackbarMsg = ''
+      this.snackbar = false
+    },
     logout () {
       this.$router.push('/')
     },
     toggleDialog () {
+      if (this.generatedInvite) this.generatedInvite = null
       this.dialog = !this.dialog
     },
     toggleEditDialog () {
       this.editNodeDialog = !this.editNodeDialog
     },
+    toggleInviteDialog () {
+      this.inviteDialog = !this.inviteDialog
+    },
     async generateInviteCode ({ ip, uses }) {
-      const input = ip
-        ? {
-            external: ip,
-            uses
-          }
-        : { uses }
+      this.generatingCode = true
+      this.uses = uses
+      const input = { uses }
+      if (ip) { input.external = ip }
       try {
         const res = await this.$apollo.mutate({
           mutation: gql`
@@ -407,8 +455,10 @@ export default {
         this.dialog = false
         this.generatedInvite = res.data.createInvite
         this.copyText = 'Copy'
+        this.generatingCode = false
       } catch (err) {
         console.error(err)
+        this.generatingCode = false
         this.generateError = 'something went wrong while trying to generate an invite code'
         throw err
       }
@@ -481,7 +531,9 @@ export default {
     AvatarGroup,
     Meter,
     GenerateInviteDialog,
-    NewNodeDialog
+    NewNodeDialog,
+    SendInviteDialog,
+    Snackbar
     // StorageGraph
   }
 }
