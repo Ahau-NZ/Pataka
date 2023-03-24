@@ -1,6 +1,6 @@
 {
   "name": "pataka-ui",
-  "version": "0.0.1",
+  "version": "4.1.0",
   "description": "A pub application for the Ahau ecosystem. Built using scuttlebutt",
   "homepage": "https://gitlab.com/ahau/whakapapa-ora",
   "scripts": {

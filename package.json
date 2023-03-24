@@ -1,6 +1,6 @@
 {
   "name": "pataka",
-  "version": "4.0.1",
+  "version": "4.1.0",
   "description": "A pub application for the Ahau ecosystem. Built using scuttlebutt",
   "homepage": "https://gitlab.com/ahau/pataka",
   "scripts": {
@@ -54,6 +54,9 @@
     "mvy": "^0.2.1",
     "rimraf": "^2.7.1",
     "typescript": "^3.9.6"
+  },
+  "engines": {
+    "node": ">=18"
   },
   "author": "Āhau Ltd.",
   "repository": {
