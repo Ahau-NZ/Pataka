@@ -50,12 +50,10 @@
           text
           color="#b12526"
           style="border-color:#b12526; background-color: #303030;"
-          @click.prevent="createPassword"
+          @click.prevent="checkPassword"
           outlined
-
         >
-            <p class="login-text mb-0">submit</p>
-
+          <p class="login-text mb-0">submit</p>
         </v-btn>
       </v-row>
     </div>
@@ -116,7 +114,10 @@ export default {
   },
   computed: {
     cloudHost () {
-      return window.location.origin !== 'file://' && window.location.hostname !== 'localhost'
+      return (
+        window.location.origin !== 'file://' &&
+        window.location.hostname !== 'localhost'
+      )
     }
   },
   mounted () {
@@ -125,7 +126,8 @@ export default {
   methods: {
     async createPassword () {
       await bcrypt.hash(this.passwordInput, 10, function (err, hash) {
-        if (err) { console.log('error encrypting password: ', err) } else console.log('hash: ', hash)
+        if (err) console.log('error encrypting password: ', err)
+        else console.log('hash: ', hash)
       })
     },
     checkPassword () {

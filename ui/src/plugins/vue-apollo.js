@@ -7,16 +7,17 @@ import possibleTypes from './possibleTypes.json'
 const env = require('ahau-env')()
 // Name of the localStorage item
 const AUTH_TOKEN = 'apollo-pataka-token'
-// Http endpoint
-const httpEndpoint =
-  process.env.VUE_APP_GRAPHQL_HTTP || `http://localhost:${env.pataka.graphql.port}/graphql`
 
 // Install the vue plugin
 Vue.use(VueApollo)
 
 // Call this in the Vue app file
 export function createProvider (opts = {}) {
-  const apolloClient = new Client(httpEndpoint, { possibleTypes, ...opts })
+  const httpEndpoint = new URL(window.location.origin)
+  httpEndpoint.port = env.pataka.graphql.port
+  httpEndpoint.pathname = '/graphql'
+
+  const apolloClient = new Client(httpEndpoint.href, { possibleTypes, ...opts })
 
   // Create vue apollo provider
   const apolloProvider = new VueApollo({

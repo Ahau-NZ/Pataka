@@ -10,7 +10,6 @@ const appPath = envPaths(env.pataka.appName, { suffix: '' }).data
 const configPath = path.join(appPath, 'config')
 
 const core = {
-  password: 'admin',
   path: appPath,
   port: env.pataka.port,
   allowPrivate: true, // used for making local invite codes
@@ -39,6 +38,12 @@ const core = {
   },
   graphql: {
     port: env.pataka.graphql.port
+  },
+  pataka: {
+    allowedOrigins: [
+      // this should be your current protocol + host + port (no trailing slash)
+      process.env.PATAKA_ORIGIN
+    ]
   },
   recpsGuard: {
     allowedTypes: [
