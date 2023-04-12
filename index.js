@@ -2,10 +2,12 @@ const ahoy = require('ssb-ahoy')
 const env = require('ahau-env')()
 const chalk = require('chalk')
 const boxen = require('boxen')
+const path = require('path')
 const { autoUpdater } = require('electron-updater')
 
 const Config = require('./ssb.config')
 const karakia = require('./karakia')
+const { version } = require('./package.json')
 
 ahoy(
   env.isDevelopment
@@ -63,15 +65,15 @@ ahoy(
 function printConfig (config) {
   const envName = env.isProduction ? '' : ` ${env.name.toUpperCase()} `
 
-  const configTxt = chalk`{green PATAKA} {white.bgRed ${envName}}
+  const configTxt = chalk`{green PATAKA} {white.bgRed ${envName}} v${version}
 
 {bold feedId}  ${config.keys.id}
-{bold path}    ${config.path}
 {bold network}
-  ├── host  ${config.host}
-  ├── port  ${config.port}
-  └── api   http://localhost:${config.graphql.port}/graphql
-`
+    ├── host  ${config.host}
+    ├── port  ${config.port}
+    └── api   http://localhost:${config.graphql.port}/graphql
+
+{bold config}  ${path.join(config.path, 'config')}`
 
   console.log(boxen(configTxt, {
     padding: 1,

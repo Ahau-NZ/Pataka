@@ -9,9 +9,16 @@ const merge = require('lodash.merge')
 const appPath = envPaths(env.pataka.appName, { suffix: '' }).data
 const configPath = path.join(appPath, 'config')
 
+const { PATAKA_LOG, PATAKA_HOST, PATAKA_WEB_PORT } = process.env
+
 const core = {
   path: appPath,
-  port: env.pataka.port,
+  port: Number(process.env.PORT) || env.pataka.port, // ssb port
+  pataka: {
+    host: PATAKA_HOST || 'localhost',
+    webPort: Number(PATAKA_WEB_PORT) || 3000,
+    log: Boolean(PATAKA_LOG)
+  },
   allowPrivate: true, // used for making local invite codes
   // HACK: There is a problem with ssb-invite where it look for a public incoming connection in the config which does not exist
   // and then throws an error.
@@ -39,12 +46,6 @@ const core = {
   graphql: {
     port: env.pataka.graphql.port
   },
-  pataka: {
-    allowedOrigins: [
-      // this should be your current protocol + host + port (no trailing slash)
-      process.env.PATAKA_ORIGIN
-    ]
-  },
   recpsGuard: {
     allowedTypes: [
       'contact', // needed for ssb-invite
@@ -60,19 +61,21 @@ module.exports = function () {
 
   let persisted = loadPersisted(configPath) || {}
   persisted = tidyPersisted(persisted)
-  if (!persisted.mixpanelId) persisted.mixpanelId = generateId()
+  if (!persisted.mixpanelId) {
+    persisted.mixpanelId = generateId()
+
+    // write a copy of customConfig to configPath so that:
+    // - we can persist our unique mixpanel ID for anonymous analytics
+    fs.writeFileSync(
+      configPath,
+      JSON.stringify(persisted, null, 2),
+      (err) => {
+        if (err) throw err
+      }
+    )
+  }
 
   config = Config(env.pataka.appName, merge({}, core, persisted))
-
-  // write a copy of customConfig to configPath so that:
-  // - we can persist our unique mixpanel ID for anonymous analytics
-  fs.writeFileSync(
-    configPath,
-    JSON.stringify(persisted, null, 2),
-    (err) => {
-      if (err) throw err
-    }
-  )
 
   return config
 }
