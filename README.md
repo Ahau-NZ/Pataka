@@ -1,4 +1,4 @@
-# Āhau Pātaka
+# Pātaka
 
 An application designed to be run as an always online peer.
 Ideally this peer is set up with a static, public IP address, (or port forwarding from one).
@@ -6,6 +6,50 @@ Ideally this peer is set up with a static, public IP address, (or port forwardin
 This peer is not able to decrypt any messages (or file) that are private to groups,
 but will replicate these messages (and files) to ensure they are accessible even when the creator
 is offline, or so there is a backup.
+
+
+## Config
+
+You can modify the config that the pataka is running by editing :
+- Mac `~/Library/Application Support/ahau-pataka/config`
+- Windows `~/AppData/Local/ahau-pataka/config`
+- Linux: `~/.local/share/ahau-pataka/config`
+
+This file is expected to be valid JSON
+
+```JSON
+{
+  "port": 8087,
+  "pataka": {
+    "host": "pataka.ahau.io",
+    "log": false,
+    "webRegistration": {
+      "port": 8000,
+      "tribes": [
+        "%2Sn8sdDl5+cJqrxo2JdVACReYudCbYQAkB0sRHEZARU=.cloaked"
+      ]
+    },
+    "allowedOrigins": [
+      "register.ahau.io"
+    ]
+  },
+  "graphql": {
+    "port": 18087
+  }
+}
+```
+_example config which for a single pataka set up to be a relay AND web registration server_
+
+- `config.pataka.host` *String* - the host your pataka invites will be set to connect via
+- `config.pataka.webRegistration` *Object* - used for turning on a web regirtration form
+    - `port` *Number* - the port to serve on
+    - `tribes` *Array* - if present, limit the registration forms displayed to only those for tribes with ids listed
+- `config.pataka.allowedOrigins` *Array* - opens the graphql API of the pataka up. Needed if `webRegistration` is wanted.
+
+Note you will have to set up port forwarding for:
+- pataka invites (port `8087` by default)
+- web registration page (port `8000` by default)
+- graphql (port `18087` by default)
 
 ## Development
 
@@ -83,7 +127,7 @@ NOTES:
 
 ---
 
-## Changes from Whakapapa-Ora desktop, ui and server
+## Changes from Ahau desktop, ui and server
 
 The setup was largely forked from Ahau (whakapapa-ora repo), with some changes:
 

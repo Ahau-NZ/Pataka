@@ -9,14 +9,15 @@ const merge = require('lodash.merge')
 const appPath = envPaths(env.pataka.appName, { suffix: '' }).data
 const configPath = path.join(appPath, 'config')
 
-const { PATAKA_LOG, PATAKA_HOST, PATAKA_WEB_PORT } = process.env
+const { PATAKA_LOG, PATAKA_HOST } = process.env
+// PATAKA_WEB_PORT
 
 const core = {
   path: appPath,
   port: Number(process.env.PORT) || env.pataka.port, // ssb port
   pataka: {
     host: PATAKA_HOST || 'localhost',
-    webPort: Number(PATAKA_WEB_PORT) || 3000,
+    // webPort: Number(PATAKA_WEB_PORT) || 3000,
     log: Boolean(PATAKA_LOG)
   },
   allowPrivate: true, // used for making local invite codes
