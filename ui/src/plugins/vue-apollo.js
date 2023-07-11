@@ -13,9 +13,14 @@ Vue.use(VueApollo)
 
 // Call this in the Vue app file
 export function createProvider (opts = {}) {
-  const httpEndpoint = new URL(window.location.origin)
-  httpEndpoint.port = env.pataka.graphql.port
-  httpEndpoint.pathname = '/graphql'
+  const httpEndpoint = (
+    process.env.VUE_APP_GRAPHQL_HTTP ||
+    `http://localhost:${env.pataka.graphql.port}/graphql`
+  )
+  // TODO 2023-07-12 (mix) this may need tweaking again *carefully* for pataka-cli
+  // const httpEndpoint = new URL(window.location.origin)
+  // httpEndpoint.port = env.pataka.graphql.port
+  // httpEndpoint.pathname = '/graphql'
 
   const apolloClient = new Client(httpEndpoint.href, { possibleTypes, ...opts })
 
