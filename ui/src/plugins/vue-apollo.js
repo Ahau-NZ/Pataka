@@ -22,7 +22,7 @@ export function createProvider (opts = {}) {
   // httpEndpoint.port = env.pataka.graphql.port
   // httpEndpoint.pathname = '/graphql'
 
-  const apolloClient = new Client(httpEndpoint.href, { possibleTypes, ...opts })
+  const apolloClient = new Client(httpEndpoint, { possibleTypes, ...opts })
 
   // Create vue apollo provider
   const apolloProvider = new VueApollo({
