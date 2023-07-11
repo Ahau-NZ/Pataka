@@ -179,4 +179,3 @@ UI:
   - `.storybook`, `.eslintrc.js`, `apollo.config.js`, `babel.config.js`, `postcss.config.js`, `vue.config.js`, `vuetify.config.js`
   - `plugins/vuetify.js`
   - `assets`
-
