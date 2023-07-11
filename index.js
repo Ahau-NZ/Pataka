@@ -18,9 +18,6 @@ ahoy(
     config: Config(),
     plugins: [
       require('ssb-db'),
-      // require('ssb-master'),
-      // require('ssb-unix-socket'),
-      // require('ssb-no-auth'),
       require('ssb-conn'),
       require('ssb-lan'),
       require('ssb-replicate'),
@@ -32,9 +29,6 @@ ahoy(
 
       require('ssb-query'),
       require('ssb-backlinks'),
-
-      require('ssb-tribes'), // TODO disable attempting decryption
-      // require('ssb-tribes-registration'),
 
       require('ssb-profile'),
       require('ssb-story'),
