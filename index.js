@@ -45,7 +45,7 @@ ahoy(
 
       require('ssb-invite'),
       require('ssb-recps-guard'),
-      require('ssb-pataka'),
+      require('ssb-pataka')
     ]
   },
   (err, ssb) => {

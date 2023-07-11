@@ -67,6 +67,7 @@ module.exports = function () {
 
     // write a copy of customConfig to configPath so that:
     // - we can persist our unique mixpanel ID for anonymous analytics
+    fs.mkdirSync(appPath, { recursive: true })
     fs.writeFileSync(
       configPath,
       JSON.stringify(persisted, null, 2),

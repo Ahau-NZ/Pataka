@@ -19,7 +19,7 @@ This file is expected to be valid JSON
 
 ```JSON
 {
-  "port": 8087,
+  "port": 8088,
   "pataka": {
     "host": "pataka.ahau.io",
     "log": false,
@@ -34,7 +34,7 @@ This file is expected to be valid JSON
     ]
   },
   "graphql": {
-    "port": 18087
+    "port": 18088
   }
 }
 ```
@@ -47,9 +47,13 @@ _example config which for a single pataka set up to be a relay AND web registrat
 - `config.pataka.allowedOrigins` *Array* - opens the graphql API of the pataka up. Needed if `webRegistration` is wanted.
 
 Note you will have to set up port forwarding for:
-- pataka invites (port `8087` by default)
-- web registration page (port `8000` by default)
-- graphql (port `18087` by default)
+- pataka invites (port `8088` by default)
+   - recommend map port `8088` => `8088` (default ssb port)
+- web registration page
+   - recommend map port `80` => `8000` (default web registration port)
+- graphql (port `18088` by default)
+   - recommend map port `18088` => `18088` (default graphql port)
+   - note that the UI assumes this default port, so changing this will likely break UI
 
 ## Development
 
