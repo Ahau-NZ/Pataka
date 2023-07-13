@@ -30,7 +30,9 @@ This file is expected to be valid JSON
       ]
     },
     "allowedOrigins": [
-      "register.ahau.io"
+      "http://register.ahau.io",
+      "http://125.52.12.74",
+      "http://localhost:8000"
     ]
   },
   "graphql": {
@@ -53,6 +55,10 @@ Note you will have to set up port forwarding for:
    - recommend map port `80` => `8000` (default web registration port)
 - graphql (port `18088` by default)
    - recommend map port `18088` => `18088` (default graphql port)
+   - note that the UI assumes this default port, so changing this will likely break UI
+- blobs (port `28088` by default)
+   - blobs is used for serving profile images
+   - recommend map port `28088` => `28088` (default blobs port)
    - note that the UI assumes this default port, so changing this will likely break UI
 
 ## Development
