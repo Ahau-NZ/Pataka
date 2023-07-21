@@ -23,12 +23,13 @@
             :gender="profile.gender"
             :showLabel="showLabels"
             :clickable="clickable"
-            @click="profileClick(profile)"
             :deletable="deletable"
-            @delete="$emit('delete', i)"
             :dark="dark"
             :row="row"
             :tile="tile"
+            :offline="profile.isOnline === undefined ? true : !profile.isOnline"
+            @click="profileClick(profile)"
+            @delete="$emit('delete', i)"
           />
         </div>
       </div>

@@ -7,7 +7,7 @@
             :size="size"
             :tile="tile"
             class="avatar-container"
-            :class="{'isEditing': isEditing}"
+            :class="{ isEditing: isEditing, online: !offline }"
             :dark="dark"
           >
             <v-img v-if="image && image.uri" :src="hackURL(image.uri)" :alt="alt" />
@@ -46,7 +46,7 @@ export default {
     showEdit: { type: Boolean, default: false },
     clickable: { type: Boolean, default: false },
     isEditing: { type: Boolean, default: false },
-    offline: { type: Boolean, default: false },
+    offline: { type: Boolean, default: true },
     dark: Boolean,
     tile: Boolean
   },
@@ -106,6 +106,11 @@ export default {
 }
 .isEditing {
   opacity: 0.2;
+}
+.online {
+  border: 1px solid #4CAF50;
+  box-shadow: 0 0 1px ;
+  filter: drop-shadow(0 0 1px #4CAF50);
 }
 
 .no-pic {

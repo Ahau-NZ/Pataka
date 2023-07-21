@@ -355,9 +355,21 @@ export default {
             gender
           }
         }
+        connectedPeers {
+          person {
+            id
+          }
+        }
+      }`,
+      pollInterval: 5 * SECONDS,
+      update (data) {
+        return data.invitedPeople.map(person => {
+          return {
+            ...person,
+            isOnline: data.connectedPeers.person.some(p => p.id === person.id)
+          }
+        })
       }
-      `,
-      pollInterval: 5 * SECONDS
     },
     tribes: {
       query: gql`query {
