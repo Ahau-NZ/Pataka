@@ -73,7 +73,7 @@ export default {
     // currently it assumes localhost (see also ssb-serve-blobs/id-to-url)
     hackURL (url) {
       const u = new URL(url)
-      u.hostname = window.location.hostname
+      u.hostname = window.location.hostname || 'localhost'
       return u.href
     },
     updateAvatar (avatarImage) {
