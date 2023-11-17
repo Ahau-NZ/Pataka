@@ -7,7 +7,6 @@ This peer is not able to decrypt any messages (or file) that are private to grou
 but will replicate these messages (and files) to ensure they are accessible even when the creator
 is offline, or so there is a backup.
 
-
 ## Config
 
 You can modify the config that the pataka is running by editing :
@@ -43,10 +42,13 @@ This file is expected to be valid JSON
 _example config which for a single pataka set up to be a relay AND web registration server_
 
 - `config.pataka.host` *String* - the host your pataka invites will be set to connect via
-- `config.pataka.webRegistration` *Object* - used for turning on a web regirtration form
+- `config.pataka.webRegistration` *Object* - used for turning on a web registration form
     - `port` *Number* - the port to serve on
     - `tribes` *Array* - if present, limit the registration forms displayed to only those for tribes with ids listed
-- `config.pataka.allowedOrigins` *Array* - opens the graphql API of the pataka up. Needed if `webRegistration` is wanted.
+    - requires the address to be added to `config.pataka.allowedOrigins` (see below)
+    - IMPORTANT: To run a dev pataka with a web registration form, see [Web Registration Form (development)](/web-registration-example.md)
+- `config.pataka.allowedOrigins` *Array* - opens the graphql API of the pataka up.
+  - Needed if `webRegistration` is wanted.
 
 Note you will have to set up port forwarding for:
 - pataka invites (port `8088` by default)
