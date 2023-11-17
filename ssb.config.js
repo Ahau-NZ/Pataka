@@ -45,7 +45,7 @@ const core = {
     port: env.pataka.hyperBlobs.port
   },
   graphql: {
-    port: env.pataka.graphql.port
+    port: Number(process.env.GRAPHQL_PORT) || env.pataka.graphql.port
   },
   recpsGuard: {
     allowedTypes: [
