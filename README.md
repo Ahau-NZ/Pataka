@@ -10,9 +10,11 @@ is offline, or so there is a backup.
 ## Config
 
 You can modify the config that the pataka is running by editing :
-- Mac `~/Library/Application Support/ahau-pataka/config`
-- Windows `~/AppData/Local/ahau-pataka/config`
-- Linux: `~/.local/share/ahau-pataka/config`
+| Platform | config path                                        |
+|----------|----------------------------------------------------|
+| Mac      | `~/Library/Application Support/ahau-pataka/config` |
+| Windows  | `~/AppData/Local/ahau-pataka/config`               |
+| Linux    | `~/.local/share/ahau-pataka/config`                |
 
 This file is expected to be valid JSON
 

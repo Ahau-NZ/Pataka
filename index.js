@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 const ahoy = require('ssb-ahoy')
 const env = require('ahau-env')()
 const chalk = require('chalk')
@@ -8,6 +9,19 @@ const { autoUpdater } = require('electron-updater')
 const Config = require('./ssb.config')
 const karakia = require('./karakia')
 const { version } = require('./package.json')
+
+// WARNING monkey patch! --------------------------------------
+const na = require('sodium-native')
+na.sodium_malloc = function sodium_malloc_monkey_patched (n) {
+  return Buffer.alloc(n)
+}
+na.sodium_free = function sodium_free_monkey_patched () {}
+// Electron > 20.3.8 breaks a napi method that `sodium_malloc`
+// depends on to create external buffers. (see v8 memory cage)
+//
+// This crashes electron when called by various libraries, so
+// we monkey-patch this particular function.
+// ------------------------------------------------------------
 
 ahoy(
   env.isDevelopment
