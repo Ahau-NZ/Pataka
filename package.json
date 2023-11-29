@@ -1,21 +1,22 @@
 {
-  "name": "pataka",
+  "name": "Pataka",
   "version": "4.2.10",
   "description": "A pub application for the Ahau ecosystem. Built using scuttlebutt",
   "homepage": "https://gitlab.com/ahau/pataka",
+  "main": "main.bundle.js",
   "scripts": {
     "postinstall": "patch-package && electron-builder install-app-deps && cd ui && npm i",
-    "start": "electron index.js -- --title Pātaka",
+    "start": "electron main.bundle.js -- --title Pātaka",
     "dev": "cross-env NODE_ENV=development DEV_SERVER_PORT=8081 electron index.js -- --title Pātaka",
     "serve": "cd ui && npm run dev",
-    "build:backend": "echo 'TODO: bundle backend'",
     "build:ui": "cd ui && npm run build",
+    "build:backend": "node bundle.mjs",
     "build:icons": "node build/build-icons.js",
     "pack": "electron-builder --config build/electron-builder.config.js --dir",
-    "dist": "electron-builder --config build/electron-builder.config.js",
+    "dist": "npm run build:backaned && electron-builder --config build/electron-builder.config.js",
     "publish": "electron-builder --config build/electron-builder.config.js --publish always",
     "move-release": "rimraf releases && mvy dist/installers releases",
-    "release": "npm run build:ui && npm run publish && npm run move-release",
+    "release": "npm run build:backend && npm run build:ui && npm run publish && npm run move-release",
     "lint": "cd ui && npm run lint"
   },
   "dependencies": {
@@ -26,7 +27,7 @@
     "env-paths": "^2.2.1",
     "lodash.merge": "^4.6.2",
     "secret-stack": "^7.1.1",
-    "ssb-ahoy": "^6.1.0",
+    "ssb-ahoy": "^6.1.1",
     "ssb-artefact": "^3.2.2",
     "ssb-backlinks": "^2.1.1",
     "ssb-blobs": "^2.0.1",
@@ -50,12 +51,19 @@
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
-    "electron-notarize": "^1.2.2",
+    "electron": "26.4.1",
+    "electron-builder": "^24.6.4",
+    "esbuild": "^0.19.8",
+    "esbuild-plugin-fileloc": "^0.0.6",
     "esm": "^3.2.25",
     "mvy": "^0.2.1",
     "patch-package": "^8.0.0",
     "rimraf": "^2.7.1",
     "typescript": "^3.9.10"
+  },
+  "optionalDependencies": {
+    "@electron/notarize": "^1.2.4",
+    "dmg-license": "^1.0.11"
   },
   "engines": {
     "node": ">=18"

@@ -1,90 +1,131 @@
+/* eslint-disable no-template-curly-in-string */
 module.exports = {
   appId: 'io.ahau.pataka',
   productName: 'Pataka',
-  afterSign: 'build/mac/notarize.js', // N
   directories: {
     output: 'dist/installers'
   },
-  asarUnpack: [
-    './node_modules/sodium-native/**' // needed for sodium-native/prebuilds trim, not sure why
-  ],
   files: [
-    '**/*',
+    // NOTE that we have to include ! (not) rules in files, otherwise
+    // electron-builder auto-adds **/*  (add everything!)
+    '!build',
+    '!node_modules',
+    '!patches',
+    '!releases',
+    '!ui',
+    '!*.env*',
 
-    /* custom */
-    '!ui/*',
-    '!releases/*',
-    '!dist/installers/*',
-    '!electron-builder.env',
+    /* main process */
+    'main.bundle.js',
 
-    // sodium-native: only include needed prebuilds
-    '!node_modules/sodium-native/prebuilds/*',
-    'node_modules/sodium-native/prebuilds/${platform}-${arch}/*', // eslint-disable-line
+    // migrations - needed for ssb-migrate to check all migrations have been provided
+    'node_modules/ssb-ahau/src/migrations/',
 
-    // README / tests: more aggressive exclusion than default
-    '!**/node_modules/**/{CHANGELOG.md,README*,README,readme.md,readme}',
-    '!**/node_modules/**/{test,__tests__,tests,powered-test,example,examples}',
+    // native module bindings for main process
+    'node_modules/node-gyp-build/*.js',
 
-    /* custom */
-    '!**/node_modules/*.d.ts',
-    '!**/node_modules/.bin',
-    '!**/*.{iml,o,hprof,orig,pyc,pyo,rbc,swp,csproj,sln,xproj}',
-    '!**/._*',
-    '!**/{.DS_Store,.git,.hg,.svn,CVS,RCS,SCCS,.gitignore,.gitattributes}',
-    '!**/{__pycache__,thumbs.db,.flowconfig,.idea,.vs,.nyc_output}',
-    '!**/{appveyor.yml,.travis.yml,circle.yml}',
-    '!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}'
+    'node_modules/sodium-chloride/*.js',
+    'node_modules/sodium-native/index.js',
+    'node_modules/sodium-native/prebuilds/${platform}-${arch}/*',
+
+    'node_modules/leveldown/*.js',
+    'node_modules/leveldown/prebuilds/${platform}-${arch}/*',
+
+    'node_modules/utp-native/index.js',
+    'node_modules/utp-native/prebuilds/${platform}-${arch}/*',
+
+    /* UI files (referenced by main.bundle.js) */
+    'dist',
+    '!dist/installers',
+
+    /* ssb-ahoy ui-window dependency */
+    'node_modules/ssb-ahoy/electron/preload.js'
   ],
+  // NOTE how to figure out what's needed:
+  //   1. run `npm run release`
+  //   2. try to launch the output (see dist/installers/*.AppImage etc)
+  //   3. read the errors about what's missing and add it above
+  // asar: false,
+  // disable asar bundling to be able to see files easier
 
-  linux: {
-    category: 'Network',
-    target: 'AppImage'
-  },
-  appImage: {
-    artifactName: '${name}-Linux-${version}-${arch}.${ext}' // eslint-disable-line
-  },
-
-  mac: {
-    category: 'public.app-category.social-networking',
-    icon: 'build/mac/icon.icns',
-    hardenedRuntime: true, // N
-    gatekeeperAssess: false // N
-    // entitlements: 'build/mac/entitlements.mac.plist', // N
-    // entitlementsInherit: 'build/mac/entitlements.mac.plist' // N
-  },
-  dmg: {
-    artifactName: '${name}-Mac-${version}.${ext}', // eslint-disable-line
-    background: 'build/mac/background.png',
-    icon: 'build/mac/dmg-icon.icns',
-    sign: false // N
-  },
-  // N = this settings requires for Apple notarization
-  // https://kilianvalkhof.com/2019/electron/notarizing-your-electron-application/
-
-  win: {
-    icon: 'build/win/icon.ico',
-    publisherName: [
-      'Ahau NZ Ltd', //        name that will probably happen
-      'Ä€hau NZ Ltd', //     << current name
-      'Ä€hau NZ Limited', //    last name
-      'Ahau NZ Limited' //     oldest name
-    ],
-    // WARNING - this name must exactly match the subject/ "issued to" field on the Signing Certificate
-    // In future if this name changes, auto-updating will fail D:
-    certificateSha1: '8BD3CF2F9D2CF6EB7E4EFF9F3890443CF7FC41F8'
-    // This is a way to be VERY specific about the exact certificate used. This worked well with EV signing cert.
-  },
-  nsis: {
-    artifactName: '${name}-Windows-${version}.${ext}', // eslint-disable-line
-    installerIcon: 'build/win/setup-icon.ico',
-    include: 'build/win/add-missing-dll.nsh' // fixes missing VCRUNTIME140.dll
-    // source: https://github.com/sodium-friends/sodium-native/issues/100
-  },
+  electronLanguages: ['en-GB', 'pt-BR', 'es'],
+  // drop all the locales not needed to save space
+  // To see options: ls installers/linux/unpacked/locales
 
   publish: [{
     provider: 'github',
     owner: 'ahau-nz',
     repo: 'pataka',
     releaseType: 'release'
-  }]
+  }],
+
+  ...linux(),
+  ...mac(),
+  ...windows()
+
+}
+
+function linux () {
+  return {
+    linux: {
+      category: 'Network',
+      target: 'AppImage'
+    },
+    appImage: {
+      artifactName: '${name}_Linux-${arch}.${ext}' // eslint-disable-line
+    }
+  }
+}
+
+function mac () {
+  return {
+    mac: {
+      category: 'public.app-category.social-networking',
+      icon: 'build/mac/icon.icns',
+      hardenedRuntime: true, // N
+      gatekeeperAssess: false, // N
+      notarize: {
+        teamId: process.env.APPLE_TEAM_ID
+        // NOTE: the following options MUST be specified via ENV to activate notarization step.
+        // It seems electrion-builder doesn't want them entered here as well - they are listed
+        // for context + clarity
+        // appleId: process.env.APPLE_ID,
+        // appleIdPassword: process.env.APPLE_APP_SPECIFIC_PASSWORD
+      } // N
+      // entitlements: 'build/mac/entitlements.mac.plist', // N
+      // entitlementsInherit: 'build/mac/entitlements.mac.plist' // N
+    },
+    dmg: {
+      artifactName: '${name}_Mac.${ext}', // eslint-disable-line
+      background: 'build/mac/background.png',
+      icon: 'build/mac/dmg-icon.icns',
+      sign: false // N
+    }
+    // N = this settings requires for Apple notarization
+    // https://kilianvalkhof.com/2019/electron/notarizing-your-electron-application/
+  }
+}
+
+function windows () {
+  return {
+    win: {
+      icon: 'build/win/icon.ico',
+      publisherName: [
+        'Ahau NZ Ltd', //        name that will probably happen
+        'Āhau NZ Ltd', //     << current name
+        'Āhau NZ Limited', //    last name
+        'Ahau NZ Limited' //     oldest name
+      ],
+      // WARNING - this name must exactly match the subject/ "issued to" field on the Signing Certificate
+      // In future if this name changes, auto-updating will fail D:
+      certificateSha1: '8BD3CF2F9D2CF6EB7E4EFF9F3890443CF7FC41F8'
+      // This is a way to be VERY specific about the exact certificate used. This worked well with EV signing cert.
+    },
+    nsis: {
+      artifactName: '${name}_Windows.${ext}', // eslint-disable-line
+      installerIcon: 'build/win/setup-icon.ico',
+      include: 'build/win/add-missing-dll.nsh' // fixes missing VCRUNTIME140.dll
+      // source: https://github.com/sodium-friends/sodium-native/issues/100
+    }
+  }
 }
