@@ -1,5 +1,15 @@
 # Pataka Changelog
 
+## v4.3.0
+
+Features
+- stop multiple instances opening in windows
+- bundle backend for faster startup
+
+Patches
+- update `ssb-ahoy` (`electron`, `secret-stack`)
+- update `electron-builder`
+
 ## v4.2.0
 
 New Features:
