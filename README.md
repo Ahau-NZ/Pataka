@@ -10,9 +10,11 @@ is offline, or so there is a backup.
 ## Config
 
 You can modify the config that the pataka is running by editing :
-- Mac `~/Library/Application Support/ahau-pataka/config`
-- Windows `~/AppData/Local/ahau-pataka/config`
-- Linux: `~/.local/share/ahau-pataka/config`
+| Platform | config path                                        |
+|----------|----------------------------------------------------|
+| Mac      | `~/Library/Application Support/ahau-pataka/config` |
+| Windows  | `~/AppData/Local/ahau-pataka/config`               |
+| Linux    | `~/.local/share/ahau-pataka/config`                |
 
 This file is expected to be valid JSON
 
@@ -91,7 +93,8 @@ You need to make sure you have `electron-builder.env` with the following env set
         - each developer with publishing rights to `github.com/protozoa-nz/pataka` needs to make their own token, make one [here](https://github.com/settings/tokens/new), selecting "repo" permissions
 - **MacOS**
     - `APPLE_ID` - email address of apple account with code signing license
-    - `APPLE_ID_PASS` - password
+    - `APPLE_APP_SPECIFIC_PASSWORD` is an application specific password created from your `APPLE_ID` see [here](https://support.apple.com/en-nz/HT204397#:~:text=How%20to%20generate%20an%20app%2Dspecific%20password)
+    - `APPLE_TEAM_ID` is the team ID you want to notarize under, you can find this by logging into your [Apple Developer Account](https://developer.apple.com/account/) and it should  be listed
 
 - **Windows**
     - `CSC_LINK=build/win/csc.pfx` - location of the code signing cert. We have ours commited to repo here

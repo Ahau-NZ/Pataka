@@ -3,6 +3,7 @@ node_modules
 .DS_Store
 yarn.lock
 
+main.bundle.js
 /releases
 
 # Electron
