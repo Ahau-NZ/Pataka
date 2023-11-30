@@ -7,7 +7,7 @@
   "scripts": {
     "postinstall": "patch-package && electron-builder install-app-deps && cd ui && npm i",
     "start": "electron main.bundle.js -- --title Pātaka",
-    "dev": "cross-env NODE_ENV=development DEV_SERVER_PORT=8081 electron index.js -- --title Pātaka",
+    "dev": "cross-env NODE_ENV=development DEV_SERVER_PORT=8081 electron main.js -- --title Pātaka",
     "serve": "cd ui && npm run dev",
     "build:ui": "cd ui && npm run build",
     "build:backend": "node bundle.mjs",
