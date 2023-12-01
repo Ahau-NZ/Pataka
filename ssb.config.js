@@ -6,7 +6,7 @@ const crypto = require('crypto')
 const envPaths = require('env-paths')
 const merge = require('lodash.merge')
 
-const appPath = envPaths(env.pataka.appName, { suffix: '' }).data
+const appPath = envPaths(process.env.APP_NAME || env.pataka.appName, { suffix: '' }).data
 const configPath = path.join(appPath, 'config')
 
 const { PATAKA_LOG, PATAKA_HOST } = process.env
