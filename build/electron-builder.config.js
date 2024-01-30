@@ -21,6 +21,8 @@ module.exports = {
     // migrations - needed for ssb-migrate to check all migrations have been provided
     'node_modules/ssb-ahau/src/migrations/',
 
+    'node_modules/ssb-pataka/ui/dist/',
+
     // native module bindings for main process
     'node_modules/node-gyp-build/*.js',
 
