@@ -9,6 +9,8 @@ const newPatakaPkg = clone(patakaPkg)
 
 const ignore = new Set([
   'ssb-ahau',
+  'ssb-crut',
+  'ssb-atala-prism',
   'ssb-tribes',
   'ssb-tribes-registration'
 ])
