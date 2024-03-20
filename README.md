@@ -38,6 +38,9 @@ This file is expected to be valid JSON
   },
   "graphql": {
     "port": 18088
+  },
+  "serveBlobs": {
+    "port": 28088
   }
 }
 ```

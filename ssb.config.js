@@ -17,7 +17,9 @@ const core = {
   port: Number(process.env.PORT) || env.pataka.port, // ssb port
   pataka: {
     host: PATAKA_HOST || 'localhost',
-    // webPort: Number(PATAKA_WEB_PORT) || 3000,
+    // webRegistration: {
+    //   port: Number(PATAKA_WEB_PORT) || 3000,
+    // }
     log: Boolean(PATAKA_LOG)
   },
   allowPrivate: true, // used for making local invite codes

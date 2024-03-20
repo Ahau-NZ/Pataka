@@ -38,7 +38,7 @@
     "ssb-hyper-blobs": "^3.1.0",
     "ssb-invite": "^3.0.3",
     "ssb-lan": "^1.2.3",
-    "ssb-pataka": "^5.3.0",
+    "ssb-pataka": "^5.3.1",
     "ssb-profile": "^6.0.1",
     "ssb-query": "^2.4.5",
     "ssb-recps-guard": "^2.3.0",
