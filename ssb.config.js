@@ -18,8 +18,8 @@ const core = {
   pataka: {
     host: PATAKA_HOST || 'localhost',
     // webRegistration: {
-    //   port: Number(PATAKA_WEB_PORT) || 3000,
-    // }
+    //   port: 8000
+    // },
     log: Boolean(PATAKA_LOG)
   },
   allowPrivate: true, // used for making local invite codes
@@ -48,6 +48,7 @@ const core = {
   },
   graphql: {
     port: Number(process.env.GRAPHQL_PORT) || env.pataka.graphql.port
+    // allowedOrigins
   },
   recpsGuard: {
     allowedTypes: [

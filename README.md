@@ -24,23 +24,19 @@ This file is expected to be valid JSON
   "pataka": {
     "host": "pataka.ahau.io",
     "log": false,
+    "allowedOrigins": [
+      "http://register.ahau.io"
+    ],
     "webRegistration": {
-      "port": 8000,
+      "httpsProxyPort": 7000,
+      "https": {
+        "fullchain": "-----BEGIN CERTIFICATE-----\n....\n-----END CERTIFICATE-----\n",
+        "privkey": "-----BEGIN PRIVATE KEY-----\n....\n-----END PRIVATE KEY-----\n"
+      },
       "tribes": [
         "%2Sn8sdDl5+cJqrxo2JdVACReYudCbYQAkB0sRHEZARU=.cloaked"
       ]
-    },
-    "allowedOrigins": [
-      "http://register.ahau.io",
-      "http://125.52.12.74",
-      "http://localhost:8000"
-    ]
-  },
-  "graphql": {
-    "port": 18088
-  },
-  "serveBlobs": {
-    "port": 28088
+    }
   }
 }
 ```
@@ -48,25 +44,20 @@ _example config which for a single pataka set up to be a relay AND web registrat
 
 - `config.pataka.host` *String* - the host your pataka invites will be set to connect via
 - `config.pataka.webRegistration` *Object* - used for turning on a web registration form
-    - `port` *Number* - the port to serve on
+    - `httpsProxyPort` *Number* (default: 7000) the address at which all web-registration form assets will be served
+    - `https` *Object* contains the `fullchain` (cert) + `privkey` (key) details for https setup
     - `tribes` *Array* - if present, limit the registration forms displayed to only those for tribes with ids listed
-    - requires the address to be added to `config.pataka.allowedOrigins` (see below)
-    - IMPORTANT: To run a dev pataka with a web registration form, see [Web Registration Form (development)](/web-registration-example.md)
-- `config.pataka.allowedOrigins` *Array* - opens the graphql API of the pataka up.
-  - Needed if `webRegistration` is wanted.
+- `config.pataka.allowedOrigins` *Array* - opens the graphql API of the pataka up. Set this to your domain for web registration
 
-Note you will have to set up port forwarding for:
+See [`ssb-pataka`](https://gitlab.com/ahau/lib/ssb-plugins/ssb-pataka) for more detailed config info.
+
+### Port-Forwarding
+
+you will have to set up port forwarding for:
 - pataka invites (port `8088` by default)
    - recommend map port `8088` => `8088` (default ssb port)
-- web registration page
-   - recommend map port `80` => `8000` (default web registration port)
-- graphql (port `18088` by default)
-   - recommend map port `18088` => `18088` (default graphql port)
-   - note that the UI assumes this default port, so changing this will likely break UI
-- blobs (port `28088` by default)
-   - blobs is used for serving profile images
-   - recommend map port `28088` => `28088` (default blobs port)
-   - note that the UI assumes this default port, so changing this will likely break UI
+- web-registration (optional)
+   - map port `443` => `7000` (default httpsProxyPort)
 
 ## Development
 
