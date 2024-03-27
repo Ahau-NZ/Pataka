@@ -9,3 +9,4 @@ main.bundle.js
 # Electron
 dist
 
+*.pem

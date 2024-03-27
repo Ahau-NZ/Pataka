@@ -8,10 +8,6 @@ const { join } = require('path')
 const { app } = require('electron')
 const { autoUpdater } = require('electron-updater')
 
-const config = require('./ssb.config')()
-const karakia = require('./karakia')
-const { version } = require('./package.json')
-
 // WARNING monkey patch! --------------------------------------
 const na = require('sodium-native')
 na.sodium_malloc = function sodium_malloc_monkey_patched (n) {
@@ -24,6 +20,11 @@ na.sodium_free = function sodium_free_monkey_patched () {}
 // This crashes electron when called by various libraries, so
 // we monkey-patch this particular function.
 // ------------------------------------------------------------
+
+const plugins = require('./ssb.plugins')
+const config = require('./ssb.config')()
+const karakia = require('./karakia')
+const { version } = require('./package.json')
 
 checkPatakaRunning()
   .then(start)
@@ -51,33 +52,7 @@ function start () {
     {
       title: 'Pātaka',
       config,
-      plugins: [
-        require('ssb-db'),
-        require('ssb-conn'),
-        require('ssb-lan'),
-        require('ssb-replicate'),
-        require('ssb-friends'),
-
-        require('ssb-blobs'),
-        require('ssb-serve-blobs'),
-        require('ssb-hyper-blobs'),
-
-        require('ssb-query'),
-        require('ssb-backlinks'),
-
-        require('ssb-invite'),
-
-        require('ssb-profile'),
-        require('ssb-settings'),
-        // TODO check why these are needed:
-        require('ssb-story'),
-        require('ssb-artefact'),
-        require('ssb-whakapapa'),
-        require('ssb-submissions'),
-
-        require('ssb-recps-guard'),
-        require('ssb-pataka')
-      ]
+      plugins
     }
   )
 }
